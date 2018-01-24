@@ -7,11 +7,12 @@
             );
 
 .timer.run:{[x]
-  t:select from .timer.jobs where period<x-lst;             //get jobs that need run
+  t:select from .timer.jobs where period<x-lst;                 //get jobs that need run
   if[count t;
-     t[`function] .' t[`args];                              //run all necessary jobs
-     delete from `.timer.jobs where id in t`id,not re;      //delete any jobs we ran that aren't recurring
-     update lst:x from `.timer.jobs where id in t`id;       //update last run time for job we ran
+     e:{.lg.e "Error running ",string[x]," : ",y}@'t`function;  //error handler projections for each function
+     .'[value@'t`function;t`args;e];                            //run necessary jobs with error catching
+     delete from `.timer.jobs where id in t`id,not re;          //delete any jobs we ran that aren't recurring
+     update lst:x from `.timer.jobs where id in t`id;           //update last run time for job we ran
     ];
  };
 
