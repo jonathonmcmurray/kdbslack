@@ -4,7 +4,7 @@
 .lg.cols:`err`wrn`inf`alt!31 33 0 34                                //define colours for each log level
 
 .lg.lg:{[lvl;msg]
-  -1 "[ ",string[.z.Z]," ] [ \033[",string[.lg.cols lvl],"m",.lg.lvls[lvl],"\033[0m ] ",msg;
+  -1 "\033[G[ ",string[.z.Z]," ] [ \033[",string[.lg.cols lvl],"m",.lg.lvls[lvl],"\033[0m ] ",msg;
  }
 
 .lg.o:.lg.i:.lg.lg[`inf]
