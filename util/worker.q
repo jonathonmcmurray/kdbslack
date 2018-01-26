@@ -3,7 +3,7 @@
      .lg.a "listening on port ",string system"p"];  //output new port
   p:string system"p";                               //get current port to give to worker for callback
   cb:string cb;                                     //convert callback function name to string
-  .lg.i "starting worker process with ",c," on ",p; //log start of worker process
+  .lg.i "starting worker process with ",c;          //log start of worker process
   system"q "," " sv (c;p;cb);                       //start bg process, telling it port & cb function to return to
  }
 
