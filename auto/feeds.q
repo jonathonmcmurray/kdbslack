@@ -1,5 +1,6 @@
-\l auto/feeds/ggrp.q
-\l auto/feeds/stack.q
+\d .feeds
+
+.util.loaddir`:auto/feeds
 
 .feeds.cfg:update id:i from ("S**";enlist",")0:`:config/feeds.csv   //load feeds config
 .feeds.ldt:.feeds.cfg[`id]!count[.feeds.cfg]#.z.z                   //set last dt for each feed to current dt
@@ -25,3 +26,7 @@ fmtc:{fmt0[1b;x;;z] each y}                                         //projection
     .slack.msg[.slack.channels`publicq]@'raze fmt'[cfg`type;nq;cfg`name]                     //format new messages without colour & send to slack
     ];
  }
+
+\d .
+
+.timer.add[`.feeds.tm;enlist .feeds.cfg;00:05:00;1b]

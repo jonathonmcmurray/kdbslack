@@ -1,3 +1,5 @@
+\d .shame
+
 topcheck:30
 shamethresh:70
 toptab:([]pid:"i"%();user:0#`;mem:0#0f;cmd:0#`;time:0#.z.P)
@@ -8,7 +10,11 @@ gettop:{[x;y;z]toptab,:select from
   shame:(key exec avg mem by user from toptab where time>.z.P-"v"$y+5)except raze exec user from shamed where time>.z.P-"v"$900;
   if[count shame;
       .slack.msg[.slack.channels`general] "user:",(","sv string (),shame)," has averaged above ",string[x],"% memory for the last ",string[y],"s";
-    `shamed insert (.z.P;first shame);];
+    `.shame.shamed insert (.z.P;first shame);];
   }
 
 .shame.tm:{gettop[shamethresh;topcheck;x]}
+
+\d .
+
+.timer.add[`.shame.tm;`;00:00:30;1b]

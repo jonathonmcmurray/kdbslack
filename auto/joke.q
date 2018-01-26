@@ -3,3 +3,5 @@
   j:.j.k (4+first r ss "\r\n\r\n")_r;
   .slack.msg[.slack.channels`random] j`joke;
  }
+
+.timer.add[`.joke.tm;`;24:00;1b]
