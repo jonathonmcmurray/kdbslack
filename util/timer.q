@@ -28,10 +28,10 @@ rm:{[i]
   delete from `.timer.jobs where id=i;
  }
 
-enable:{system"t ",string x}
+enable:{system"t ",string $[type[x]within -19 -16;`int$`time$x;x]}
 disable:{enable 0}
 
 \d .
 
 .z.ts:.timer.run
-.timer.enable 5000
+.timer.enable 00:00:05
