@@ -1,13 +1,15 @@
-.timer.jobs:([] id:       `int$();  //identifier for job
-                function:    `$();  //function to run
-                args:          ();  //arguments to be passed (list)
-                period:  `time$();  //periodicity with which to run job
-                lst:`timestamp$();  //last time job was run
-                re:   `boolean$()   //recurring, if false delete after running
-            );
+\d .timer
 
-.timer.run:{[x]
-  t:select from .timer.jobs where period<x-lst;                 //get jobs that need run
+jobs:([] id:       `int$();  //identifier for job
+         function:    `$();  //function to run
+         args:          ();  //arguments to be passed (list)
+         period:  `time$();  //periodicity with which to run job
+         lst:`timestamp$();  //last time job was run
+         re:   `boolean$()   //recurring, if false delete after running
+     );
+
+run:{[x]
+  t:select from jobs where period<x-lst;                        //get jobs that need run
   if[count t;
      e:{.lg.e "Error running ",string[x]," : ",y}@'t`function;  //error handler projections for each function
      .'[value@'t`function;t`args;e];                            //run necessary jobs with error catching
@@ -16,15 +18,20 @@
     ];
  };
 
-.timer.add:{[f;a;p;r]
-  id:$[count .timer.jobs;1+max .timer.jobs`id;0];
+add:{[f;a;p;r]
+  id:$[count jobs;1+max jobs`id;0];
   .lg.i "Adding timer job for function ",string f;
-  `.timer.jobs upsert enlist cols[.timer.jobs]!(id;f;(),a;`time$p;.z.P;r);
+  `.timer.jobs upsert enlist cols[jobs]!(id;f;(),a;`time$p;.z.P;r);
  }
 
-.timer.rm:{[i]
+rm:{[i]
   delete from `.timer.jobs where id=i;
  }
 
+enable:{system"t ",string x}
+disable:{enable 0}
+
+\d .
+
 .z.ts:.timer.run
-system"t 5000"
+.timer.enable 5000
