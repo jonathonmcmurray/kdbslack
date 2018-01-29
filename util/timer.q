@@ -24,8 +24,8 @@ add:{[f;a;p;r]
   `.timer.jobs upsert enlist cols[jobs]!(id;f;(),a;`time$p;.z.P;r);
  }
 
-rm:{[i]
-  delete from `.timer.jobs where id=i;
+rm:{[x]
+  delete from `.timer.jobs where id=x;
  }
 
 enable:{system"t ",string $[type[x]within -19 -16;`int$`time$x;x]}
