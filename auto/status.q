@@ -12,5 +12,4 @@ cb:{[m]
 
 \d .
 
-.timer.add[`.status.tm;`;24:00;1b]                                                  //add daily timer for report
-update lst:.z.D+09:00 from `.timer.jobs where function=`.status.tm;                 //adjust last run time to 9AM today so report runs at 9AM tomorrow
+.timer.adddaily[`.status.tm;`;09:00;"1-5"]                                          //add daily timer for report, 9am Mon-Fri
