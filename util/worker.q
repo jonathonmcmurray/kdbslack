@@ -1,15 +1,19 @@
-.worker.create:{[c;cb] /c:command for worker to run e.g. q script path,cb:callback function
-  if[not system"p";system"p 0W";                    //if current proc not on a port, pick a random available one
-     .lg.a "listening on port ",string system"p"];  //output new port
-  p:string system"p";                               //get current port to give to worker for callback
-  cb:string cb;                                     //convert callback function name to string
-  .lg.i "starting worker process with ",c;          //log start of worker process
-  system"q "," " sv (c;p;cb);                       //start bg process, telling it port & cb function to return to
+\d .worker
+
+create:{[c;cb] /c:command for worker to run e.g. q script path,cb:callback function
+  if[not system"p";system"p 0W";                                                    //if current proc not on a port, pick a random available one
+     .lg.a "listening on port ",string system"p"];                                  //output new port
+  p:string system"p";                                                               //get current port to give to worker for callback
+  cb:string cb;                                                                     //convert callback function name to string
+  .lg.i "starting worker process with ",c;                                          //log start of worker process
+  system"q "," " sv (c;p;cb);                                                       //start bg process, telling it port & cb function to return to
  }
 
-.worker.ret:{[x]
-  (`$"::",.z.x 0)(cb:`$.z.x 1;x);
+ret:{[x] /function for workers to use to return value
+  (`$"::",.z.x 0)(cb:`$.z.x 1;x);                                                   //get port & callback function name from cmd line args, send return value
  }
+
+\d .
 
 \
 Example usage:

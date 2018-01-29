@@ -1,6 +1,6 @@
 \l util/load.q
-.util.loaddir`:util
-.util.loaddir`:command
+.load.dir`:util
+.load.dir`:command
 .timer.disable[]
 
 /-- entrypoint --
