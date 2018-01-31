@@ -1,8 +1,11 @@
 \l util/worker.q
 m:enlist "```";
 
+/-- uptime --
+m,:(1_raze system"uptime";"")
+
 /-- external IP --
-m,:"External IP: ",raze system"curl -s ipinfo.io/ip";
+m,:"External IP: ",.j.k[.Q.hg`:http://httpbin.org/ip]`origin;
 m,:"";
 
 /-- speedtest --
