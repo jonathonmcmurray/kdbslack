@@ -22,6 +22,8 @@ groups.list:{.Q.hp[url`groups.list;.post.ty`form;.post.urlencode (1#`token)!enli
 groups.info:{[chid].Q.hp[url`groups.info;.post.ty`form;.post.urlencode `token`channel!(token;chid)]}
 ims.list:{.Q.hp[url`ims.list;.post.ty`form;.post.urlencode (1#`token)!enlist token]}
 ims.info:{[chid].Q.hp[url`ims.info;.post.ty`form;.post.urlencode `token`channel!(token;chid)]}
+users.list:{.Q.hp[url`users.list;.post.ty`form;.post.urlencode (1#`token)!enlist token]}
+users.info:{[uid].Q.hp[url`users.info;.post.ty`form;.post.urlencode `token`channel!(token;uid)]}
 
 /-- wrappers --
 /the following are more advanced wrappers than above for certain API calls
