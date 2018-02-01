@@ -65,7 +65,7 @@ alrt:{[tl] /tl-table list - new issues, new state, new comments
 tm:{[]
   m:alrt upd getissues[];                                                           //get any new notifications
   if[0<count m;
-     .slack.msg[.slack.channels`jonathon.mcmurray]"qchat GitHub updates:\n",m       //send via DM
+     .slack.msg[.slack.hooks`jonathon.mcmurray]"qchat GitHub updates:\n",m          //send via DM
     ];
  }
 

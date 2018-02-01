@@ -23,7 +23,7 @@ fmtc:{fmt0[1b;x;;z] each y}                                                     
   nq:chk'[cfg`type;cfg`id;] dl'[cfg`type;cfg`url];                                  //download & check each feed in cfg
   if[0<max count@'nq;                                                               //check for 0 being less than count of nq - FIX this check is wrong
     .lg.a "New questions in feeds, sending to slack";
-    .slack.msg[.slack.channels`publicq]@'raze fmt'[cfg`type;nq;cfg`name]            //format new messages without colour & send to slack
+    .slack.msg[.slack.hooks`publicq]@'raze fmt'[cfg`type;nq;cfg`name]               //format new messages without colour & send to slack
     ];
  }
 

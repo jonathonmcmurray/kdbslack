@@ -15,5 +15,13 @@ json:{
  }
 
 ty:@[.h.ty;`form;:;"application/x-www-form-urlencoded"]                             //add type for url encoded form, used for slash commands
+hu:.h.hug .Q.an,"-.~"                                                               //URI escaping for non-safe chars, RFC-3986
+
+urlencode:{[d] /d-dictionary
+  k:key d;v:get d;                                                                  //split dictionary into keys & values
+  v:enlist@'hu@'@[v;where 10<>type@'v;string];                                      //string any values that aren't stringed,escape any chars that need it
+  k:enlist@'$[all 10=type@'k;k;string k];                                           //if keys are strings, string them
+  :"&" sv "=" sv' k,'v;                                                             //return urlencoded form of dictionary
+ }
 
 \d .

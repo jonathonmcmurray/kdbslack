@@ -4,7 +4,7 @@ dl:{.j.k .Q.hg`$":http://quotes.rest/qod.json?category=inspire"}                
 
 tm:{
   q:dl[];                                                                           //get new quote
-  .slack.msg[.slack.channels`general]                                               //post to #general
+  .slack.msg[.slack.hooks`general]                                                  //post to #general
     "\n - " sv q[`contents;`quotes;0;`quote`author];                                //post quote & author
  }
 

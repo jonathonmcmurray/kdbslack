@@ -11,7 +11,7 @@ gettop:{[x;y;z]toptab,:select from
   shame:(key exec avg mem by user from toptab where time>.z.P-"v"$y+5)except raze exec user from shamed where time>.z.P-"v"$900;
   shame:`${users a?min a:.util.lvn[x]@'users}@'string shame;                        //convert truncated names to real user names
   if[count shame;
-      .slack.msg[.slack.channels`general] "user:",(","sv string (),shame)," has averaged above ",string[x],"% memory for the last ",string[y],"s";
+      .slack.msg[.slack.hooks`general] "user:",(","sv string (),shame)," has averaged above ",string[x],"% memory for the last ",string[y],"s";
     `.shame.shamed insert (.z.P;first shame);];
   }
 

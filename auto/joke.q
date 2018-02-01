@@ -5,7 +5,7 @@ tm:{
                                  "Accept: application/json\r\n",
                                  "Host:icanhazdadjoke.com\r\n\r\n";
   j:.j.k (4+first r ss "\r\n\r\n")_r;                                               //trim HTTP headers off response
-  .slack.msg[.slack.channels`random] j`joke;                                        //post joke
+  .slack.msg[.slack.hooks`random] j`joke;                                           //post joke
  }
 
 \d .

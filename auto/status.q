@@ -7,7 +7,7 @@ tm:{
 
 cb:{[m]
   .lg.i "Daily status report complete, sending";                                    //alert report has been received to callback
-  .slack.msg[.slack.channels`homerstatus] "\n" sv m;                                //send report to slack
+  .slack.msg[.slack.hooks`homerstatus] "\n" sv m;                                   //send report to slack
  }
 
 \d .
