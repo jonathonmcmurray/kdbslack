@@ -12,4 +12,4 @@ cb:{[m]
 
 \d .
 
-.timer.adddaily[`.status.tm;`;09:00;"1-5"]                                          //add daily timer for report, 9am Mon-Fri
+.timer.adddaily[`.status.tm;`;09:00;"2-6"]                                          //add daily timer for report, 9am Mon-Fri

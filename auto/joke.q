@@ -10,4 +10,4 @@ tm:{
 
 \d .
 
-.timer.adddaily[`.joke.tm;`;10:30;"1-5"]                                            //add timer for daily run at 10:30, Mon-Fri
+.timer.adddaily[`.joke.tm;`;10:30;"2-6"]                                            //add timer for daily run at 10:30, Mon-Fri
