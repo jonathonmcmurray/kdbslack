@@ -11,6 +11,7 @@ form:{
 json:{
   j:.j.k x;                                                                         //parse to JSON
   if[`challenge in key j;:j`challenge];                                             //for challenge parameter, respond with challenge value
+  if[`event in key j;.slack.event j];                                               //pass events into slack event handler
   /-- handle other cases where we recieve JSON --
  }
 
