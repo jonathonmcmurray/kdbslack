@@ -10,4 +10,4 @@ tm:{
 
 \d .
 
-.timer.adddaily[`.quote.tm;`;16:00;"1-5"]                                           //add timer for daily run at 4PM, Mon-Fri
+.timer.adddaily[`.quote.tm;`;16:00;"2-6"]                                           //add timer for daily run at 4PM, Mon-Fri
