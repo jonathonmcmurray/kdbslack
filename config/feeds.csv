@@ -2,3 +2,4 @@ type,url,name
 ggrp,https://groups.google.com/forum/feed/personal-kdbplus/topics/rss.xml?num=15,Google Groups (personal kdb)
 ggrp,https://groups.google.com/forum/feed/kdbtorq/topics/rss.xml?num=15,Google Groups (kdbtorq)
 stack,https://api.stackexchange.com/2.2/questions?order=desc&sort=creation&tagged=kdb&site=stackoverflow,StackOverflow
+k4,https://www.listbox.com/member/archive/rss/1080/28455222-31a93654,k4 Listbox
