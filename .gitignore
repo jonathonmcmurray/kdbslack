@@ -1,3 +1,5 @@
 config/channels.csv
 config/gh_token
 config/slack_token
+config/welcome_message.txt
+config/ansgroups.txt
