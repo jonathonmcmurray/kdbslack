@@ -11,7 +11,7 @@ jobs:([] id:       `int$();                                                     
 
 run:{[x]
   t:select from jobs where period<x-lst,0=count@'days;                              //get regular jobs that need run
-  t,:select from jobs where mod[`date$x;7]in/:days,("d"$lst)<"d"$x,period<`time$x;  //join daily jobs that need run
+  t,:select from jobs where mod[`date$x;7]in/:days,lst<x,period<`time$x;            //join daily jobs that need run
   if[count t;
      e:{.lg.e "Error running ",string[x]," : ",y}@'t`function;                      //error handler projections for each function
      .'[value@'t`function;t`args;e];                                                //run necessary jobs with error catching
