@@ -6,7 +6,7 @@ ip:getip[]
 tm:{
   if[.ip.ip~n:getip[];
      .ip.ip:n;                                                                      //update stored IP address
-     .slack.msg[.slack.hooks`homerstatus] "New IP address detected: ",n;     //msg about new IP
+     .slack.msg[.slack.hooks`homerstatus] "New IP address detected: ",n;            //msg about new IP
     ];
  }
 
