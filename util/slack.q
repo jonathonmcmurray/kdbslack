@@ -21,7 +21,7 @@ event:{[j]
  }
 
 events.team_join:{[e]
-  if[not e[`user][`id] in users;                                                    //check if this is a dupe notification etc.
+  if[not e[`user][`id] in .slack.userlist`id;                                       //check if this is a dupe notification etc.
      users,:e[`user][`id];                                                          //add to user list so we don't welcome them twice
      .lg.o "Sending welcome msg to new user ",e[`user][`real_name]," (",e[`user][`name],")";
      postas[welcomemsg;e[`user][`id];"AquaQ Analytics Welcome"];                    //send welcome message as DM (via slackbot conversation)
@@ -64,5 +64,5 @@ postas:{[m;c;u] /m-message,c-channel ID,u-user
   .Q.hp[.slack.url`chat.postMessage;.post.ty`form;.post.urlencode d];               //send POST request to API URL
  }
 
-users:value flip (1#`id)#/:.j.k[.slack.users.list[]]`members;                       //get list of all users currently signed up
+userlist:"*SS"$/:`id`name`real_name#/:.j.k[.slack.users.list[]]`members;            //get list of all users currently signed up
 \d .
