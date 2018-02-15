@@ -4,7 +4,7 @@ getip:{.j.k[.Q.hg`:http://httpbin.org/ip]`origin}                               
 ip:getip[]
 
 tm:{
-  if[.ip.ip~n:getip[];
+  if[not .ip.ip~n:getip[];
      .ip.ip:n;                                                                      //update stored IP address
      .slack.msg[.slack.hooks`homerstatus] "New IP address detected: ",n;            //msg about new IP
     ];
