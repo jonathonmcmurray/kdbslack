@@ -2,18 +2,24 @@
 
 topcheck:30
 shamethresh:70
-toptab:([]pid:"i"%();user:0#`;mem:0#0f;cmd:0#`;time:0#.z.P)
+toptab:([]pid:"i"%();user:0#`;mem:0#0f;cmd:0#`;time:0#0Np)
 shamed:([]time:0#.z.P;user:`)
 users:system"cut -d: -f1 /etc/passwd"
-gettop:{[x;y;z]toptab,:select from
-  (update time:.z.P from `pid`user`mem`cmd xcol
-    ("IS       F S";enlist",")0:","sv'{x where 0<count@'x}@'" "vs'6_system"top -bn1 -o \"%MEM\"") where mem>x;
-  shame:(key exec avg mem by user from toptab where time>.z.P-"v"$y+5)except raze exec user from shamed where time>.z.P-"v"$900;
+
+gettop:{[x;y;z]
+  top:","sv'{x where 0<count each x}each" "vs'6_system"top -bn1 -o \"%MEM\"";       //dump top output to in-mem CSV
+  t:update time:.z.P from `pid`user`mem`cmd xcol ("IS       F S";enlist",")0:top;   //parse to KDB table
+  toptab,:select from t where mem>x;                                                //append anything over threshold to toptab
+  rs:raze exec user from shamed where time>.z.P-"v"$900;                            //recent shamees
+  shame:(key exec avg mem by user from toptab where time>.z.P-"v"$y+5)except rs;    //those to be shamed now
   shame:`${users a?min a:.util.lvn[x]@'users}@'string shame;                        //convert truncated names to real user names
   if[count shame;
-      .slack.msg[.slack.hooks`general] "user:",(","sv string (),shame)," has averaged above ",string[x],"% memory for the last ",string[y],"s";
-    `.shame.shamed insert (.z.P;first shame);];
-  }
+     msg:"user:",(","sv string (),shame)," has averaged above ",                    //construct message for sending to slack
+          string[x],"% memory for the last ",string[y],"s";
+     .slack.msg[.slack.hooks`general;msg];                                          //send message
+     `.shame.shamed insert (.z.P;first shame);                                      //add to shamed list to prevent re-shaming
+    ];
+ }
 
 .shame.tm:{gettop[shamethresh;topcheck;x]}
 
