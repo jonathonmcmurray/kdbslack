@@ -54,15 +54,22 @@ getchannelid:{[x]
   :(n;m@n);                                                                         //return closest named channel & it's ID
  }
 
-postas:{[m;c;u] /m-message,c-channel ID,u-user
+postas0:{[m;c;u;i;e] /m-message,c-channel ID,u-user,i-icon,e-emoji
   d:()!();                                                                          //create dictionary to build up API request
   d[`token]:token;
   d[`channel]:c;
   d[`text]:m;
   d[`as_user]:`false;
   d[`username]:u;
+  if[count i;d[`icon_url]:i];                                                       //if icon url is passed in, use it
+  if[count e;d[`icon_emoji]:e];                                                     //if icon emoji is passed in, use it
   .Q.hp[.slack.url`chat.postMessage;.post.ty`form;.post.urlencode d];               //send POST request to API URL
  }
 
+postas:postas0[;;;"";""]                                                            //projection to post as a username with default icon
+postasi:postas0[;;;;""]                                                             //projection to post as username with icon URL
+postase:postas0[;;;"";]                                                             //projection to post as username with emoji icon
+
 userlist:"*SS"$/:`id`name`real_name#/:.j.k[.slack.users.list[]]`members;            //get list of all users currently signed up
+chanlist:{c:.j.k[channels.list[]]`channels;g:.j.k[groups.list[]]`groups;exec name!id from raze `name`id#/:(c;g)}[]
 \d .
