@@ -3,6 +3,8 @@ A framework for a KDB back end to a Slack bot
 
 ## auto.q
 
+*Depreceated - use `q kdbslack.q -load auto -timer` instead*
+
 This script forms the backend for the "automatic" messaging portion of the bot.
 
 These are driven by a timer (`util/timer.q`) and use Slack webhooks to send
@@ -27,6 +29,8 @@ The following files are loaded and used in this process:
 * status.q provides a daily report on the status of the host server
 
 ## command.q
+
+*Depreceated - use `q kdbslack.q -load command -post` instead*
 
 This script provides the backend for the "command" portion of the bot.
 

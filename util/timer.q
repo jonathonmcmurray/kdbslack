@@ -47,4 +47,3 @@ disable:{enable 0}
 \d .
 
 .z.ts:.timer.run
-.timer.enable 00:00:05
