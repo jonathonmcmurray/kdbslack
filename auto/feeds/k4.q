@@ -8,7 +8,7 @@ dl.k4:{[url]
 
 chk.k4:{[id;k4]
   d:"Z"$1_k4[0][1][;1;;1]@'k4[0][1][;1;;0]?\:`$"dc:date";                           //get dates for items
-  nq:k4[0;1;where d>.feeds.ldt[id];1];                                              //select items that are new
+  nq:k4[0;1;1+where d>.feeds.ldt[id];1];                                            //select items that are new
   .feeds.ldt[id]:max d;                                                             //update latest datetime
   nq:(!/) each flip each nq;                                                        //format to dictionaries
   nq:$[count nq;
