@@ -1,16 +1,38 @@
 \d .chlg
 
-url:`:http://challenges.aquaq.co.uk/api/board.json                                  //url for API
-st:count each .j.k .Q.hg url                                                        //get inital state
+url:`:http://challenges.aquaq.co.uk/api/board.json                                  //url for API (board)
+burl:`:http://challenges.aquaq.co.uk/api/badge.json                                 //url for API (badge)
+logo:"https://raw.githubusercontent.com/jonathonmcmurray/kdbslack/master/util/challengehub.png"
+st:count each .j.k .Q.hg url                                                        //get initial state
+getbdgs:{.j.k .Q.hg burl};
+bs:getbdgs[]                                                                        //get initial board state
+
+bdgs:{
+  a:.chlg.getbdgs[];                                                                //download badges
+  n:w,'d w:where 0<count each d:a except' bs;                                       //get new badges earnt
+  postbdg each n;                                                                   //post all the new badges
+  bs::a;
+ }
+
+postbdg:{
+  nm:string x 0;                                                                    //name
+  msgs:nm,/:" earned the '",/:(1_x)[;0],\:"' badge";                                //messages to send
+  m:("gold";"silver";"bronze");                                                     //list of possible medals
+  /icos:":",'(1_x)[;1],'":";                                                         //icons to use
+  icos:m first where m in (1_x)[;1];                                                //use icon of highest medal
+  icos:":",icos,":";                                                                //add colons to make it an emoji
+  .slack.postase[;.slack.chanlist"qquestions";"Badges Bot";icos]'[msgs];            //post message for each awarded badge
+ }
 
 tm:{
   n:count each .j.k .Q.hg url;                                                      //download new board
   u:(where st<>n)#n-st;                                                             //get changes
   if[0<count u;                                                                     //if challenges completed, trigger message
-     .slack.postase[;.slack.chanlist"aquachan";"Challenge Bot";":warning:"]         //send message with warning emoji as icon
+     .slack.postasi[;.slack.chanlist"qquestions";"Challenge Bot";logo]              //send message with icon
      "Challenges completed in the last 5 mins:\n```",.Q.s[u],"```"                  //stringify dict
     ];
   st::n;                                                                            //update state
+  bdgs[];                                                                           //check for badges
  }
 
 \d .
