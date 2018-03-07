@@ -12,6 +12,11 @@ msg:{[url;msg].Q.hp[hsym`$url;.h.ty`json].j.j enlist[`text]!enlist msg}
 jrep:{.h.hy[`json] .j.j `response_type`text!(x;y)}                                  //generic function to build JSON response
 pub:jrep["in_channel"]                                                              //broadcast a message publicly
 ret:jrep["ephemeral"]                                                               //return a message, privately
+ok:"HTTP/1.1 200 OK\r\nConnection: close\r\n\r\n"                                   //simple no-content HTTP 200 OK message
+
+/-- utilities --
+
+taguser:{[uid] "<@",uid,">"}
 
 /-- events --
 
@@ -22,7 +27,7 @@ event:{[j]
 
 events.team_join:{[e]
   if[not e[`user][`id] in .slack.userlist`id;                                       //check if this is a dupe notification etc.
-     users,:e[`user][`id];                                                          //add to user list so we don't welcome them twice
+     .slack.userlist,:"*SS"$`id`name`real_name#e`user;                              //add to user list so we don't welcome them twice
      .lg.o "Sending welcome msg to new user ",e[`user][`real_name]," (",e[`user][`name],")";
      postas[welcomemsg;e[`user][`id];"AquaQ Analytics Welcome"];                    //send welcome message as DM (via slackbot conversation)
     ];
