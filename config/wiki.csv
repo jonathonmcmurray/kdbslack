@@ -459,6 +459,7 @@ UTC datetime,../dotz/#zz-utc-datetime
 local datetime,../dotz/#zz-local-datetime
 .z.zd,../dotz/#zzd-zip-defaults
 zip defaults,../dotz/#zzd-zip-defaults
+.z.t, .z.T, .z.d, .z.D,../dotz/#zt-zt-zd-zd-timedate-shortcuts
 .z.t,../dotz/#zt-zt-zd-zd-timedate-shortcuts
 .z.T,../dotz/#zt-zt-zd-zd-timedate-shortcuts
 .z.d,../dotz/#zt-zt-zd-zd-timedate-shortcuts
