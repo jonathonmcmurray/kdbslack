@@ -1,0 +1,9 @@
+Hi there!
+
+Welcome to the AquaQ Analytics Slack workspace! :)
+
+Now that you're here, why not pop over to <#C02FKQANF|general> and say hello? You should also set a profile picture, to help us identify people - pick something fun!
+
+You may also like to join a few of our other public channels, like <#C02FKQANV|random> for non-work related bantering, or <#C8XKR4JGP|public-q-channel> for more specific discussion of KDB+/q
+
+If you have any problems or need any help with anything, don't hesitate to ping <@U8VJ54DMK>
