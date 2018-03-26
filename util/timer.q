@@ -46,4 +46,4 @@ disable:{enable 0}
 
 \d .
 
-.z.ts:.timer.run
+.z.ts:{.timer.run .z.P}                                                             //run timer with local time
