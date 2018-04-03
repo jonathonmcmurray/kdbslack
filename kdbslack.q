@@ -11,7 +11,7 @@ if[`timer in key .proc.args;.timer.enable 00:00:05];                            
 
 if[`post in key .proc.args;                                                         //if post arg passed, define POST handler
    .z.pp:{
-     .post.raw,:enlist x:@[x;1;{.Q.id'[key x]!get x}];                              //remove special chars from header names, store raw POST requests
+     .post.raw,:enlist x:@[x;1;{.Q.id'[key x]!value x}];                            //remove special chars from header names, store raw POST requests
      :.post[.post.ty?x[1]`ContentType;x[0]];                                        //lookup function based on Content-Type & pass payload
     }
   ];
