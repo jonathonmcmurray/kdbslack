@@ -4,9 +4,11 @@ lkup:{
   d:.j.k .Q.hg`$":http://api.urbandictionary.com/v0/define?term=",.h.hu x;          //get definition from API
   d:$["no_results"~d`result_type;                                                   //check we got a result
       "not found";                                                                  //if no result
-      rand d[`list;where s>0.25*max[s:sum d[`list;`thumbs_up`thumbs_down]];`definition]];   //randomly select where >25% of max votes
+      d[`list;w[til count d`list;`int$(-). d[`list][`thumbs_up`thumbs_down]];`definition]];  //randomly select based on weighting by upvotes
   :raze"The definition of ",x," is: ",d;                                            //return definition
  };
+
+w:{[o;w]rand raze w#'o}                                                                  //choose an option based on weighting
 
 f:{
   s:lkup x`text;                                                                    //lookup search term
