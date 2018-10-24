@@ -1,6 +1,7 @@
 \d .ip
 
 getip:{.j.k[.Q.hg`:http://httpbin.org/ip]`origin}                                   //get & parse IP address
+getip:{raze system"curl -s ipinfo.io/ip"}
 ip:getip[]
 
 tm:{
