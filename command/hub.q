@@ -1,6 +1,6 @@
 \d .hub
 
-url:`:http://challenges.aquaq.co.uk/api/board.json
+url:`:https://challenges.aquaq.co.uk/api/board.json
 logo:"https://raw.githubusercontent.com/jonathonmcmurray/kdbslack/master/util/challengehub.png"
 
 f:{
