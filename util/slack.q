@@ -45,6 +45,7 @@ im.list:{.Q.hp[url`im.list;.post.ty`form;.post.urlencode (1#`token)!enlist token
 im.info:{[chid].Q.hp[url`im.info;.post.ty`form;.post.urlencode `token`channel!(token;chid)]}
 users.list:{.Q.hp[url`users.list;.post.ty`form;.post.urlencode (1#`token)!enlist token]}
 users.info:{[uid].Q.hp[url`users.info;.post.ty`form;.post.urlencode `token`user!(token;uid)]}
+files.upload:{.req.postmulti[url`files.upload;@[x;`token;:;token]]}
 
 /-- wrappers --
 /the following are more advanced wrappers than above for certain API calls
