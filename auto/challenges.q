@@ -1,5 +1,6 @@
 \d .chlg
 
+
 url:`:https://challenges.aquaq.co.uk/api/board.json                                 //url for API (board)
 burl:`:https://challenges.aquaq.co.uk/api/badge.json                                //url for API (badge)
 logo:"https://raw.githubusercontent.com/jonathonmcmurray/kdbslack/master/util/challengehub.png"
