@@ -2,9 +2,9 @@
 
 .req.addcookie["adventofcode.com";"session=",first read0`:config/aoc_cookie];                                   //load & add AoC session cookie
 st:enlist[0N 0N]!enlist[flip `name`local_score`stars`global_score`id`last_star_ts`completion_day_level!()];     //state dict for states of each lb & year combo
-yrlst:2015 2016 2017;                                                                                           //list of years that can be queried
+yrlst:2015 2016 2017 2018;                                                                                           //list of years that can be queried
 prstrs:enlist[0N]!enlist ([id:()] stars:());                                                                    //dict to mantain prev star totals
-lb:113940                                                                                                       //AquaQ leaderboard
+lb:113948                                                                                                       //AquaQ leaderboard
 
 getlb:{[x;y] /x:leaderboard id,y:year
   j:.req.g"http://adventofcode.com/",string[y],"/leaderboard/private/view/",string[x],".json";                  // web request for lb JSON
@@ -25,9 +25,9 @@ newstrs:{[x] /x:leaderboard
   u:(where not prstrs[x]~'totstrs x);
   u:(exec id from u) inter exec id from totstrs x where stars>0;
   if[count u;                                                                                                   //alert
-     s:"The following users have received stars in the last 10 mins:\n",
-        -1_.Q.s select from (totstrs[x]-prstrs[x]) where id in u;
-     .slack.postase[s;.slack.chanlist"advent";"Advent Bot";":aoc:"];
+     s:"The following users have received stars in the last 10 mins:\n```",
+        .Q.s[select from (totstrs[x]-prstrs[x]) where id in u],"```";
+     .slack.postase[s;.slack.chanlist"advent";"Advent Bot";":star:"];
      prstrs[x]:totstrs x;                                                                                       //update state of prev stars
     ];
  };
@@ -39,8 +39,8 @@ gtlb:{[x;y] /x:leaderboard id,y:year
 
 aclb:{[u;c] /u:user,c:channel
   updst[.aoc.lb;last .aoc.yrlst];
-  .slack.postase["Hey ",u," here's the current AOC leaderboard for this year:\n",.Q.s gtlb[.aoc.lb;last .aoc.yrlst];
-          c;"Advent Bot";":aoc:"];
+  .slack.postase["Hey ",u," here's the current AOC leaderboard for this year:\n```",.Q.s[gtlb[.aoc.lb;last .aoc.yrlst]],"```";
+          c;"Advent Bot";":star:"];
  };
 
 \d .
