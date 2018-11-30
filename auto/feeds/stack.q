@@ -2,9 +2,9 @@
 
 /-- main --
 dl.stack:{[url]
-  system"wget -o /dev/null -O /tmp/so.json \"",url,"\"";                            //download silently with wget & save to /tmp
-  so:.j.k raze system"cat /tmp/so.json | gzip -d";                                  //decompress return with gzip & parse as JSON
-  hdel `:/tmp/so.json;                                                              //remove tmp file
+  system"wget -o /dev/null -O /tmp/so-slack.json \"",url,"\"";                      //download silently with wget & save to /tmp
+  so:.j.k raze system"cat /tmp/so-slack.json | gzip -d";                            //decompress return with gzip & parse as JSON
+  hdel `$":/tmp/so-slack.json";                                                     //remove tmp file
   :so;                                                                              //return parsed JSON
  }
 
