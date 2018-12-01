@@ -45,6 +45,5 @@ aclb:{[u;c] /u:user,c:channel
 
 \d .
 
-/.aoc.updst[.aoc.lb;last .aoc.yrlst];                                                                            //update state dict for both leaderboards across all three years
-/@[`.aoc.prstrs;.aoc.lb;:;.aoc.totstrs .aoc.lb];                                                                 //get the initial no. of stars for each user
-/`cron insert (.z.P+"u"$10;`.aoc.newstrs;enlist .aoc.lbs`openaccess);        //insert cron job to update & detect new stars every 10 mins
+.aoc.updst[.aoc.lb;last .aoc.yrlst];                                                                            //update state dict for both leaderboards across all three years
+@[`.aoc.prstrs;.aoc.lb;:;.aoc.totstrs .aoc.lb];                                                                 //get the initial no. of stars for each user
