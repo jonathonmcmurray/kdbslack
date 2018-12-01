@@ -17,18 +17,18 @@ updst:{[x;y] /x:leaderboard id,y:year
  };
 
 totstrs:{[x] /x:leaderboard
-  :update "j"$stars from 1!0!(pj/){2!select id,name,stars from x}'[st@(x cross yrlst)];
+  :update "j"$stars from 1!select id,name,stars from st@(x;last yrlst);
  };
 
 newstrs:{[x] /x:leaderboard
-  updst .' x cross yrlst;                                                                                       //update state for all years on all boards
-  u:(where not prstrs[x]~'totstrs x);
-  u:(exec id from u) inter exec id from totstrs x where stars>0;
+  updst[lb;last yrlst];                                                                                         //update state for all years on all boards
+  u:(where not prstrs[lb]~'totstrs lb);
+  u:(exec id from u) inter exec id from totstrs lb where stars>0;
   if[count u;                                                                                                   //alert
      s:"The following users have received stars in the last 10 mins:\n```",
-        .Q.s[select from (totstrs[x]-prstrs[x]) where id in u],"```";
+        .Q.s[select from (totstrs[lb]-prstrs[lb]) where id in u],"```";
      .slack.postase[s;.slack.chanlist"advent";"Advent Bot";":star:"];
-     prstrs[x]:totstrs x;                                                                                       //update state of prev stars
+     prstrs[.aoc.lb]:totstrs .aoc.lb;                                                                           //update state of prev stars
     ];
  };
 
@@ -45,6 +45,6 @@ aclb:{[u;c] /u:user,c:channel
 
 \d .
 
-.aoc.updst[.aoc.lb]'[.aoc.yrlst];                                                                               //update state dict for both leaderboards across all three years
-@[`.aoc.prstrs;.aoc.lb;:;.aoc.totstrs .aoc.lb];                                                                 //get the initial no. of stars for each user
+/.aoc.updst[.aoc.lb;last .aoc.yrlst];                                                                            //update state dict for both leaderboards across all three years
+/@[`.aoc.prstrs;.aoc.lb;:;.aoc.totstrs .aoc.lb];                                                                 //get the initial no. of stars for each user
 /`cron insert (.z.P+"u"$10;`.aoc.newstrs;enlist .aoc.lbs`openaccess);        //insert cron job to update & detect new stars every 10 mins
