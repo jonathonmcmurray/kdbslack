@@ -1,6 +1,7 @@
 \d .aoc
 
 .req.addcookie["adventofcode.com";"session=",first read0`:config/aoc_cookie];                                   //load & add AoC session cookie
+.req.def["User-Agent"],:";contact=jonathon.mcmurray@aquaq.co.uk";                                               //add contact info to UA in case of issues
 st:enlist[0N 0N]!enlist[flip `name`local_score`stars`global_score`id`last_star_ts`completion_day_level!()];     //state dict for states of each lb & year combo
 yrlst:2015 2016 2017 2018;                                                                                           //list of years that can be queried
 prstrs:enlist[0N]!enlist ([id:()] stars:());                                                                    //dict to mantain prev star totals
@@ -26,7 +27,7 @@ newstrs:{[x] /x:leaderboard
   u:(exec id from u) inter exec id from totstrs lb where stars>0;
   if[count u;                                                                                                   //alert
      s:"The following users have received stars in the last 10 mins:\n```",
-        .Q.s[select from (totstrs[lb]-prstrs[lb]) where id in u],"```";
+        .Q.s[select from ((2!0!totstrs[lb])-2!0!prstrs[lb]) where id in u],"```";
      .slack.postase[s;.slack.chanlist"advent";"Advent Bot";":star:"];
      prstrs[.aoc.lb]:totstrs .aoc.lb;                                                                           //update state of prev stars
     ];
