@@ -18,7 +18,6 @@
 / preamble
 .lfm.key:@[{first read0 x};.lfm.file.key;""];                                                   / get api key
 .lfm.users:@[get;.lfm.file.cache;([uid:()]name:();username:())];                                / get user cache
-.lfm.users:([uid:0 1 2]name:`Thomas`Scott`Conal;username:`rocketship92`squigley93`clogan38);    / user cache for testing
 .lfm.valid:{.lfm.enabled and not""~.lfm.key};                                                   / check service is enabled and key file exists
 
 / http requests
