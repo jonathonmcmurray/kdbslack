@@ -1,9 +1,5 @@
 (.lfm.console:{system"c "," "sv string 20 1000|system"c"})[];
 
-/ libs
-\l util/req.q
-\l util/log.q
-
 / config
 .lfm.enabled:1b;                                                                                / determine if functionality is enabled
 .lfm.file.key:`:config/lfm_key;                                                                 / location of API key file
