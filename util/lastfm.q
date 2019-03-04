@@ -4,7 +4,7 @@
 .lfm.enabled:1b;                                                                                / determine if functionality is enabled
 .lfm.file.key:`:config/lfm_key;                                                                 / location of API key file
 .lfm.file.cache:`:config/lfm_users;                                                             / location of user cache file
-.lfm.channel:`qradio;                                                                           / channel to post charts to
+.lfm.channel:"qradio";                                                                          / channel to post charts to
 .lfm.url:"http://ws.audioscrobbler.com/2.0/?";                                                  / base of URL
 .lfm.o.default:10;                                                                              / default number to include for charts
 .lfm.o.custom:`tracks`artists`albums!10 5 5;                                                    / custom number of results to include for each chart type

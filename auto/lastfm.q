@@ -6,8 +6,8 @@ tm:{
   if[0=count .lfm.users;:.lg.w"No last.fm usernames provuded, chart timer aborted"];            / exit if no cached usernames
   if[0=count .lfm.o.charts;:.lg.w"No charts currently specified in .lfm.o.charts"];
   c:chart[];                                                                                    / get charts
-  .lg.o"Sending last.fm charts to slack";
-  .slack.msg[.slack.hooks .lfm.channel]c;                                                       / post chart
+  .lg.o"Posting last.fm charts to slack as lastfmbot in ",.lfm.channel;
+  .slack.postase[c;.slack.chanlist .lfm.channel;"lastfmbot";":lastfm:"];                        / post charts as lastfmbot
  };
 
 \d .
