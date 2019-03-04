@@ -13,5 +13,5 @@ tm:{
 \d .
 
 if[.lfm.valid[];                                                                                / only run if last.fm api key exists and functionality is enabled
-  .timer.adddaily[`.lfm.tm;`;10:00;"4"]                                                         / add timer for daily run at 10:00, Wed
+  .timer.adddaily[`.lfm.tm;`;10:00;"2"]                                                         / add timer for daily run at 10:00, Monday
  ];
