@@ -33,7 +33,10 @@
       .lg.e"Error making last.fm request";
       :(([]playcount:();artist:();name:();album:());d;0);
     ];
-    l&:"J"$first[value r][`$"@attr"]`total;                                                     / update limit to ensure correct number of results are processed
+    if[0=l&:"J"$first[value r][`$"@attr"]`total;                                                / update limit to ensure correct number of results are processed
+      .lg.o"No results for user, returning blank table";
+      :(([]playcount:();artist:();name:();album:());d;0);
+    ];
     r@:first except[;`$"@attr"]key r@:first key r;                                              / extract relevant values
     :(t,r;@[d;`page;1+];l);                                                                     / return params
   }.)/[{x[2]>count x 0};(();d;l)];
