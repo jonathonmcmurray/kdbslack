@@ -131,12 +131,12 @@
     .lg.e"Failed to get user info for ",u," with error: ",v`message;
     :(0b;"username is invalid");                                                                / return failed status
   ];
-  `.lfm.users upsert(id;`$n;`$u);                                                               / add/update record in cache
+  `.lfm.users upsert(`$id;`$n;`$u);                                                             / add/update record in cache
   :(1b;"successfully added username ",u);                                                       / return passed status
  };
 
 .lfm.u.rm:{[id;n;u]                                                                             / [id;name;username] remove user from cache
   .lg.o"Removing username for ",n;
-  delete from`.lfm.users where uid=id;                                                          / remove record in cache
+  delete from`.lfm.users where uid=`$id;                                                        / remove record in cache
   :(1b;"successfully removed last.fm username");                                                / return passed status
  };
