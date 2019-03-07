@@ -18,21 +18,6 @@ ok:"HTTP/1.1 200 OK\r\nConnection: close\r\n\r\n"                               
 
 taguser:{[uid] "<@",uid,">"}
 
-/-- events --
-
-event:{[j]
-  e:j`event;                                                                        //extract event
-  if[(t:`$e`type) in key events;events[t] e];                                       //pass to handler for event
- }
-
-events.team_join:{[e]
-  if[not e[`user][`id] in .slack.userlist`id;                                       //check if this is a dupe notification etc.
-     .slack.userlist,:"*SS"$`id`name`real_name#e`user;                              //add to user list so we don't welcome them twice
-     .lg.o "Sending welcome msg to new user ",e[`user][`real_name]," (",e[`user][`name],")";
-     postas[welcomemsg;e[`user][`id];"AquaQ Analytics Welcome"];                    //send welcome message as DM (via slackbot conversation)
-    ];
- }
-
 /-- api calls --
 /the following are wrappers around slack API calls (of the same name) exposing very basic functionality
 /for more advanced usage of these API calls, more sophisticated code will be necessary
