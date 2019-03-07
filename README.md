@@ -14,7 +14,7 @@ In order to start kdbslack, clone this repo & run `q kdbslack.q` from the root d
 For example, to start with full functionality on port 8100:
 
 ```
-$ q kdbslack.q -p 8100 -load auto command -post -timer
+$ q kdbslack.q -p 8100 -load auto,command,events -post -timer
 ```
 
 To start with only auto plugins (will automatically select a free port to run on & log this to console):
@@ -72,7 +72,7 @@ events.team_join:{[e]
  }
  ```
  
- Due to their location in `util/slack.q`, currently all event plugins will always be loaded. However for them to work, you will need to use the `-post` option on the command line & specify a publicly accessible port that is also configured on Slack.
+ When starting kdbslack, include `events` in the load directories to load these plugins. You will also need to use the `-post` option on the command line & specify a publicly accessible port that is also configured on Slack.
 
 ## workers/
 
