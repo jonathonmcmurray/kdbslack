@@ -110,7 +110,7 @@
     :();
   ];
   .lg.o"Producing charts for ",", "sv string .lfm.o.charts;
-  fm:{.lfm.o.format[x][]}'[(),.lfm.o.charts];                                                   / get top charts for passed params
+  fm:.lfm.o.format'[(),.lfm.o.charts];                                                          / get top charts for passed params
   res:"\n\n"sv first each fm;                                                                   / get top charts for passed params and stitch together
   uc:"\n\nUser count: ",string count .lfm.users;                                                / get user stats
   sc:"\nScrobble count: ",string max last each fm;                                              / get total scrobbles
