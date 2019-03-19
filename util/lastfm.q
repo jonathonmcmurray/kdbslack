@@ -98,7 +98,11 @@
  };
 
 / output formatting functions
-.lfm.o.format:{[t].lfm.c.format[@[string t;0;upper]].lfm.c.wrapper[t].lfm.top[t][]};            / wrapper for formatting charts
+.lfm.o.format:{[t]                                                                              / wrapper for formatting charts
+  data:.lfm.top[t][];                                                                           / make request for passed chart
+  fm:.lfm.c.format[@[string t;0;upper]].lfm.c.wrapper[t]data;                                   / format chart output
+  :(fm;sum data`playcount);                                                                     / return formatted chart and stats
+ };
 
 .lfm.chart:{
   if[0=count .lfm.o.charts;                                                                     / check that there are charts to produce
@@ -106,10 +110,12 @@
     :();
   ];
   .lg.o"Producing charts for ",", "sv string .lfm.o.charts;
-  res:"\n\n"sv{.lfm.o.format[x][]}'[(),.lfm.o.charts];                                          / get top charts for passed params and stitch together
+  fm:{.lfm.o.format[x][]}'[(),.lfm.o.charts];                                                   / get top charts for passed params
+  res:"\n\n"sv first each fm;                                                                   / get top charts for passed params and stitch together
   uc:"\n\nUser count: ",string count .lfm.users;                                                / get user stats
+  sc:"\nScrobble count: ",string max last each fm;                                              / get total scrobbles
   .lg.o"Returning formatted charts";
-  :"```",res,uc,"```";                                                                          / wrap in code block to preserve formatting in slack
+  :"```",res,uc,sc,"```";                                                                       / wrap in code block to preserve formatting in slack
  };
 
 / helper functions to correctly parse columns
