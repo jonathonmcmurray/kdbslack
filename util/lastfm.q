@@ -7,9 +7,9 @@
 .lfm.channel:"qradio";                                                                          / channel to post charts to
 .lfm.url:"http://ws.audioscrobbler.com/2.0/?";                                                  / base of URL
 .lfm.o.default:10;                                                                              / default number to include for charts
-.lfm.o.custom:`tracks`artists`albums!10 5 5;                                                    / custom number of results to include for each chart type
-.lfm.o.charts:`tracks`albums`artists;                                                           / list of charts to return
-.lfm.o.users:0b;                                                                                / whether to include users in chart output
+.lfm.o.custom:`tracks`artists`albums!20 20 10;                                                  / custom number of results to include for each chart type
+.lfm.o.charts:`tracks`artists`albums;                                                           / list of charts to return
+.lfm.o.cols:`users`usercount!01b;                                                               / optional columns to include in output
 
 / preamble
 .lfm.key:@[{first read0 x};.lfm.file.key;""];                                                   / get api key
@@ -79,15 +79,15 @@
  };
 
 / chart formatting functions
-.lfm.c.tracks:{[data]select sum playcount,users:distinct user by artist,`$track from data};     / select data for tracks chart
-.lfm.c.albums:{[data]select sum playcount,users:distinct user by artist,`$album from data};     / select data for albums chart
-.lfm.c.artists:{[data]select sum playcount,users:distinct user by artist from data};            / select data for artists chart
+.lfm.c.tracks:{[data]select sum playcount,users:distinct user,usercount:count distinct user by artist,`$track from data}; / select data for tracks chart
+.lfm.c.albums:{[data]select sum playcount,users:distinct user,usercount:count distinct user by artist,`$album from data}; / select data for albums chart
+.lfm.c.artists:{[data]select sum playcount,users:distinct user,usercount:count distinct user by artist from data}; / select data for artists chart
 
 .lfm.c.wrapper:{[t;data]                                                                        / [type;data] wrapper for selecting chart data
   c:.lfm.o.default^.lfm.o.custom t;                                                             / find number of results to return
   res:`n xcols 0!update n:1+i from c#`playcount xdesc .lfm.c[t]data;                            / sort by playcount and add numbering
   .lg.o"Returning ",string[t]," chart";
-  :$[.lfm.o.users;res;delete users from res];                                                   / return table, removing users column if required
+  :where[not .lfm.o.cols]_res;                                                                  / return chart, applying optional column settings
  };
 
 .lfm.c.format:{[t;data]t," Chart\n\n",.Q.s .lfm.h.trim data};                                   / [type;data] format chart for slack
