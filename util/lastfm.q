@@ -50,7 +50,7 @@
 .lfm.r.recent:{[u;s;e].lfm.req.p`method`user`limit`from`to!(`user.getrecenttracks;u;0W),.lfm.unix s,e}; / [username;start timestamp;end timestamp] get scrobbled tracks in specified window
 
 .lfm.user.recent:{[u;s;e]                                                                       / [user;start timsetamp;end timestamp]
-  res:flip[.lfm.req.cols[`recent]!()],(cl:.lfm.req.cols`recent)#/:.lfm.r.recent[u;s;e];         / request top artists
+  res:flip[cl!()],(cl:.lfm.req.cols`recent)#/:.lfm.r.recent[u;s;e];                             / request top artists
   :`artist`track`album xcol@[;`name;`$].lfm.parse[res;cols res];                                / extract data from nested columns
  };
 
@@ -107,7 +107,7 @@
  };
 
 / helper functions to correctly parse columns
-.lfm.parse:{[t;c]{.lfm.p[y]x}/[t;c]};                                                            / [table;columns] format columns
+.lfm.parse:{[t;c]{.lfm.p[y]x}/[t;c]};                                                           / [table;columns] format columns
 .lfm.p.artist:{@[x;`artist;{`$x`$"#text"}@']};                                                  / extract name from nested table
 .lfm.p.album:{@[x;`album;{`$x`$"#text"}@']};                                                    / extract name from nested table
 
@@ -128,7 +128,7 @@
     .lg.e"Failed to get user info for ",u," with error: ",v`message;
     :(0b;"username is invalid");                                                                / return failed status
   ];
-  `.lfm.users upsert(`$id;`$n;`$u);                                                             / add/update record in cache
+  `.lfm.users upsert`$(id;n;u);                                                                 / add/update record in cache
   :(1b;"successfully added username ",u);                                                       / return passed status
  };
 
