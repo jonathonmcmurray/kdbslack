@@ -1,14 +1,16 @@
 \d .lfm
 
-tm:{
+postChart:{[s;e]                                                                                / [start timestamp;end timestamp] post chart for given range
   .lg.o"Running last.fm charts timer";
   if[not .lfm.valid[];:.lg.w"last.fm not enabled, chart timer aborted"];                        / exit if functionality disabled
   if[0=count .lfm.users;:.lg.w"No last.fm usernames provuded, chart timer aborted"];            / exit if no cached usernames
   if[0=count .lfm.o.charts;:.lg.w"No charts currently specified in .lfm.o.charts"];
-  c:chart[];                                                                                    / get charts
+  c:chart[.z.d-7;.z.d];                                                                         / get charts
   .lg.o"Posting last.fm charts to slack as lastfmbot in ",.lfm.channel;
   .slack.postase[c;.slack.chanlist .lfm.channel;"lastfmbot";":lastfm:"];                        / post charts as lastfmbot
  };
+
+tm:{postChart[.z.d-7;.z.d]};                                                                    / post chart for previous 7 days
 
 \d .
 

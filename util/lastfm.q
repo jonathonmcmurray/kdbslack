@@ -16,12 +16,14 @@
 .lfm.users:@[get;.lfm.file.cache;([uid:()]name:();username:())];                                / get user cache
 .lfm.valid:{.lfm.enabled and not""~.lfm.key};                                                   / check service is enabled and key file exists
 
-.lfm.req.cols:`recent`tracks`artists`albums!(`artist`name`album;`playcount`artist`name;`playcount`artist`name;`playcount`artist`album);
+.lfm.req.cols:enlist[`recent]!enlist`artist`name`album;                                         / columns to include in output
+
+.lfm.unix:{floor((`long$`timestamp$x)-`long$1970.01.01D00:00)%1e9};                             / [date/timestamp] convert to unix timestamp
 
 / http requests
 .lfm.req.r:{[d]                                                                                 / [params] make a request to last.fm
   url:.lfm.url,.req.urlencode d;                                                                / encode passed params
-  :.j.k raze system"curl -s '",url,"'";
+  :.j.k raze system"curl -s '",url,"'";                                                         / make curl request to last.fm servers
  };
 
 .lfm.req.s:{[d].lfm.req.r(`format`api_key!(`json;.lfm.key)),d};                                 / [params] make a request for a single page
@@ -45,74 +47,35 @@
   }.)/[{x[2]>count x 0};(();d;l)];
  };
 
-.lfm.r.tracks:{[u].lfm.req.p`method`period`user`limit!(`user.gettoptracks;`7day;u;0W)};         / [username] helper function for top track requests
-.lfm.r.albums:{[u].lfm.req.p`method`period`user`limit!(`user.gettopalbums;`7day;u;0W)};         / [username] helper function for top album requests
-.lfm.r.artists:{[u].lfm.req.p`method`period`user`limit!(`user.gettopartists;`7day;u;0W)};       / [username] helper function for artist requests
-
-.lfm.unix:{floor((`long$`timestamp$x)-`long$1970.01.01D00:00)%1e9};                             / [date/timestamp] convert to unix timestamp
-
-.lfm.r.recent:{[u;s;e]                                                                          / [username;start timestamp;end timestamp]
-  :.lfm.req.p`method`user`limit`from`to!(`user.getrecenttracks;u;0W),.lfm.unix s,e;
- };
-
-.lfm.user.top.tracks:{[u]                                                                       / [user] top tracks for a user
-  res:.lfm.r[`tracks]u;                                                                         / request top tracks
-  res:`playcount`artist`name#res;                                                               / extract playcount table
-  :`playcount`artist`track xcol .lfm.parse[res;cols res];                                       / extract data from nested columns
- };
-
-.lfm.user.top.albums:{[u]                                                                       / [user] top albums for a user
-  res:.lfm.r[`albums]u;                                                                         / request top albums
-  res:`playcount`artist`name#res;                                                               / extract playcount table
-  :`playcount`artist`album xcol .lfm.parse[res;cols res];                                       / extract data from nested columns
- };
-
-.lfm.user.top.artists:{[u]                                                                      / [user] top artists for a user
-  res:.lfm.r[`artists]u;                                                                        / request top artists
-  res:`playcount`name#res;                                                                      / extract playcount table
-  :`playcount`artist xcol@[;`name;`$].lfm.parse[res;cols res];                                  / extract data from nested columns
- };
+.lfm.r.recent:{[u;s;e].lfm.req.p`method`user`limit`from`to!(`user.getrecenttracks;u;0W),.lfm.unix s,e}; / [username;start timestamp;end timestamp] get scrobbled tracks in specified window
 
 .lfm.user.recent:{[u;s;e]                                                                       / [user;start timsetamp;end timestamp]
   res:flip[.lfm.req.cols[`recent]!()],(cl:.lfm.req.cols`recent)#/:.lfm.r.recent[u;s;e];         / request top artists
-  :`artist`track`album xcol@[;`name;`$].lfm.parse2[res;cols res];                               / extract data from nested columns
+  :`artist`track`album xcol@[;`name;`$].lfm.parse[res;cols res];                                / extract data from nested columns
  };
 
-.lfm.h.top:{[t;n;u]                                                                             / [type;name;username] wrapper to get chart for single user
-  res:update user:n from .lfm.user.top[t]u;                                                     / make request to last.fm
-  .lg.o"Returning ",string[t]," data for ",string n;
-  :res;
- };
-
-.lfm.top:{[t]                                                                                   / get chart for passed type
-  .lg.o"Requesting top ",string[t]," for each user";
-  res:raze .lfm.h.top[t]./:exec(name,'username)from .lfm.users;                                 / get top chart for passed param for each user
-  .lg.o"Returning top ",string[t]," for each user";
-  :res;
- };
-
-.lfm.h.scrobbles:{[s;e;n;u]
+.lfm.h.scrobbles:{[s;e;n;u]                                                                     / [start timestamp;end timestamp;name;username] get scrobbles for a single user
   .lg.o"Requesting scrobbles for ",string[n]," between ",string[s]," and ",string e;
-  res:update user:n from .lfm.user.recent[u;s;e];
+  res:update user:n from .lfm.user.recent[u;s;e];                                               / get scrobbles and add name to table
   .lg.o"Returning scrobbles for ",string[n]," between ",string[s]," and ",string e;
-  :res;
+  :res;                                                                                         / return scrobbles for a user
  };
 
 .lfm.scrobbles:{[s;e]                                                                           / [start timestamp;end timestamp] get scrobbles for all users
   .lg.o"Requesting scrobbles for each user between ",string[s]," and ",string e;
   res:raze .lfm.h.scrobbles[s;e]./:exec(name,'username)from .lfm.users;                         / get top chart for passed param for each user
   .lg.o"Returning top scrobbles for each user between ",string[s]," and ",string e;
-  :res;
+  :res;                                                                                         / return raw data
  };
 
 / chart formatting functions
-.lfm.c.tracks:{[data]`playcount xdesc select playcount:count i,users:distinct user,usercount:count distinct user by artist,track from data}; / select data for tracks chart
-.lfm.c.albums:{[data]`playcount xdesc select playcount:count i,users:distinct user,usercount:count distinct user by artist,album from data}; / select data for albums chart
-.lfm.c.artists:{[data]`playcount xdesc select playcount:count i,users:distinct user,usercount:count distinct user by artist from data}; / select data for artists chart
+.lfm.c.tracks:{[data]select scrobbles:count i,users:distinct user,usercount:count distinct user by artist,track from data}; / select data for tracks chart
+.lfm.c.albums:{[data]select scrobbles:count i,users:distinct user,usercount:count distinct user by artist,album from data}; / select data for albums chart
+.lfm.c.artists:{[data]select scrobbles:count i,users:distinct user,usercount:count distinct user by artist from data}; / select data for artists chart
 
 .lfm.c.wrapper:{[t;data]                                                                        / [type;data] wrapper for selecting chart data
   c:.lfm.o.default^.lfm.o.custom t;                                                             / find number of results to return
-  res:`n xcols 0!update n:1+i from c sublist`playcount xdesc .lfm.c[t]data;                     / sort by playcount and add numbering
+  res:`n xcols 0!update n:1+i from c sublist`scrobbles xdesc .lfm.c[t]data;                     / sort by scrobbles and add numbering
   .lg.o"Returning ",string[t]," chart";
   :where[not .lfm.o.cols]_res;                                                                  / return chart, applying optional column settings
  };
@@ -137,18 +100,16 @@
   fm:.lfm.o.format[data]'[(),.lfm.o.charts];                                                    / get top charts for passed params
   res:"\n\n"sv fm;                                                                              / get top charts for passed params and stitch together
   uc:"\n\nUser count: ",string count .lfm.users;                                                / get user stats
+  us:"\nUnique scrobblers: ",string exec count distinct user from data;                         / get number of users to scrobble over charting period
   sc:"\nScrobble count: ",string count data;                                                    / get total scrobbles
   .lg.o"Returning formatted charts";
-  :"```",res,uc,sc,"```";                                                                       / wrap in code block to preserve formatting in slack
+  :"```",res,uc,us,sc,"```";                                                                    / wrap in code block to preserve formatting in slack
  };
 
 / helper functions to correctly parse columns
-.lfm.parse:{[t;c]{.lfm.p[y]x}/[t;c]};                                                           / [table;columns] format columns
-.lfm.p.artist:{@[x;`artist;{`$x`name}@']};                                                      / extract name from nested table
-.lfm.p.playcount:{@[x;`playcount;"J"$]};                                                        / convert to long
-.lfm.parse2:{[t;c]{.lfm.p2[y]x}/[t;c]};                                                           / [table;columns] format columns
-.lfm.p2.artist:{@[x;`artist;{`$x`$"#text"}@']};                                                 / extract name from nested table
-.lfm.p2.album:{@[x;`album;{`$x`$"#text"}@']};                                                   / extract name from nested table
+.lfm.parse:{[t;c]{.lfm.p[y]x}/[t;c]};                                                            / [table;columns] format columns
+.lfm.p.artist:{@[x;`artist;{`$x`$"#text"}@']};                                                  / extract name from nested table
+.lfm.p.album:{@[x;`album;{`$x`$"#text"}@']};                                                    / extract name from nested table
 
 / user handling
 .lfm.u.handler:{[id;n;u]                                                                        / [id;name;username] handle username update requests
