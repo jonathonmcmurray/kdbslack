@@ -10,7 +10,7 @@ postChart:{[s;e]                                                                
   .slack.postase[c;.slack.chanlist .lfm.channel;"lastfmbot";":lastfm:"];                        / post charts as lastfmbot
  };
 
-tm:{postChart[.z.d-7;.z.d]};                                                                    / post chart for previous 7 days
+tm:{postChart .(.z.d-7 0)+10:00};                                                               / post chart for previous 7 days
 
 \d .
 
