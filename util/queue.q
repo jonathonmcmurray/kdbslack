@@ -3,7 +3,7 @@
 \d .wk
 
 q:()                                                                                //queue for jobs
-dojob:{if[count q;t:q 0;.[value t 0;t 1;{.lg.e"queued work failed: ",x}];q::1_q]}   //pop top job & do it
+dojob:{if[count q;t:q 0;.[value t 0;t 1;{.lg.e"queued work failed: ",x}];q::1_q;.z.s[]]} //pop top job & do it, repeat
 
 \d .
 
