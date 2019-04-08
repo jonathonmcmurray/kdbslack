@@ -4,3 +4,6 @@ config/slack_token
 config/smtoken
 config/welcome_message.txt
 config/ansgroups.txt
+config/aoc_cookie
+config/lfm_key
+config/lfm_users
