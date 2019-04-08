@@ -80,7 +80,7 @@
   :where[not .lfm.o.cols]_res;                                                                  / return chart, applying optional column settings
  };
 
-.lfm.c.format:{[t;data]t," Chart\n\n",.Q.s .lfm.h.trim data};                                   / [type;data] format chart for slack
+.lfm.c.format:{[t;data]t," Chart\n\n",.fmt.t .lfm.h.trim data};                               / [type;data] format chart for slack
 
 .lfm.h.trim:{[data]                                                                             / [data] trim columns
   d:(cols[data]inter key d)#d:`artist`track`album!30 50 40;                                     / custom column widths
