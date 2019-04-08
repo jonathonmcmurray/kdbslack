@@ -18,7 +18,8 @@ m,:-1_.Q.s select from (.Q.id ("SSSSSS";enlist",")0:"," sv'{x where 0<count@'x}@
 
 /-- TorQ stacks --
 t:flip `count`user`stackid`stime!("ISIS";4#20)0:system"bash workers/gettorqs.sh"
-t:select from t where not stackid in 9800 13400                                     //filter out prodsupport team regular stacks
+/t:select from t where not stackid in 9800 13400                                     //filter out prodsupport team regular stacks
+t:select from t where not user in `devops1`fxcm
 if[0<count t;
    m,:("";"Running TorQ stacks");
    m,:-1_.Q.s t
@@ -26,3 +27,5 @@ if[0<count t;
 
 m,:"```";
 .worker.ret[m];
+
+exit 0;

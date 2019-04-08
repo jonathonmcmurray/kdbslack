@@ -6,7 +6,7 @@ awk '{                                         # -- START AWK PROGRAM --
       {printf "%-20s", $1;                     # output the username from each line
        for(i=1;i<=NF;i++)                      # iterate over all fields (split on space)
         {if($i=="-stackid")                    # find stackid field
-          {printf "%-20s%s",$(i+1),$2}         # output next field i.e. actual port no, plus start time
+          {printf "%-20s%s",substr($(i+1),1,16),$2}         # output next field i.e. actual port no, plus start time
         }
        printf "\n";                            # closing line
       }
