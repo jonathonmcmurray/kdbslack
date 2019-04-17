@@ -16,5 +16,7 @@ if[`post in key .proc.args;                                                     
     }
   ];
 
+.z.ph:{.h.he"GET disabled"}                                                         //disable GET requests
+
 if[not system"p";system"p 0W"];                                                     //make sure to open a port, if none specified on cmd line
 .lg.a "Running on port :",string system"p";                                         //output the running port

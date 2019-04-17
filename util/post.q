@@ -25,4 +25,6 @@ urlencode:{[d] /d-dictionary
   :"&" sv "=" sv' k,'v;                                                             //return urlencoded form of dictionary
  }
 
+.z.ac:{:(1;"slack")}                                                                //TODO implement proper auth of HTTP requests
+
 \d .
