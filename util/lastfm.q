@@ -75,7 +75,7 @@
 
 .lfm.c.wrapper:{[t;data]                                                                        / [type;data] wrapper for selecting chart data
   c:.lfm.o.default^.lfm.o.custom t;                                                             / find number of results to return
-  res:c sublist`scrobbles xdesc .lfm.c[t]data;                                                  / sort by scrobbles
+  res:c sublist`scrobbles`usercount xdesc .lfm.c[t]data;                                        / sort by scrobbles and total listening users
   res:`n xcols 0!update n:fills?[differ scrobbles;1+i;0N]from res;                              / number track placement
   .lg.o"Returning ",string[t]," chart";
   :where[not .lfm.o.cols]_res;                                                                  / return chart, applying optional column settings
