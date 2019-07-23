@@ -75,12 +75,13 @@
 
 .lfm.c.wrapper:{[t;data]                                                                        / [type;data] wrapper for selecting chart data
   c:.lfm.o.default^.lfm.o.custom t;                                                             / find number of results to return
-  res:`n xcols 0!update n:1+i from c sublist`scrobbles xdesc .lfm.c[t]data;                     / sort by scrobbles and add numbering
+  res:c sublist`scrobbles xdesc .lfm.c[t]data;                                                  / sort by scrobbles
+  res:`n xcols 0!update n:fills?[differ scrobbles;1+i;0N]from res;                              / number track placement
   .lg.o"Returning ",string[t]," chart";
   :where[not .lfm.o.cols]_res;                                                                  / return chart, applying optional column settings
  };
 
-.lfm.c.format:{[t;data]t," Chart\n\n",.fmt.t .lfm.h.trim data};                               / [type;data] format chart for slack
+.lfm.c.format:{[t;data]t," Chart\n\n",.fmt.t .lfm.h.trim data};                                 / [type;data] format chart for slack
 
 .lfm.h.trim:{[data]                                                                             / [data] trim columns
   d:(cols[data]inter key d)#d:`artist`track`album!30 50 40;                                     / custom column widths
@@ -97,13 +98,13 @@
   ];
   data:.lfm.scrobbles[s;e];                                                                     / get scrobbles for all users
   .lg.o"Producing charts for ",", "sv string .lfm.o.charts;
-  fm:.lfm.o.format[data]'[(),.lfm.o.charts];                                                    / get top charts for passed params
-  res:"\n\n"sv fm;                                                                              / get top charts for passed params and stitch together
+  fm:.lfm.o.charts!.lfm.o.format[data]'[(),.lfm.o.charts];                                      / get top charts for passed params
   uc:"\n\nUser count: ",string count .lfm.users;                                                / get user stats
   us:"\nUnique scrobblers: ",string exec count distinct user from data;                         / get number of users to scrobble over charting period
   sc:"\nScrobble count: ",string count data;                                                    / get total scrobbles
-  .lg.o"Returning formatted charts";
-  :"```",res,uc,us,sc,"```";                                                                    / wrap in code block to preserve formatting in slack
+  fm[`stats]:uc,us,sc;                                                                          / add stats to dictionary
+  .lg.o"Returning formatted charts and stats";
+  :{"```",x,"```"}each fm;                                                                      / wrap in code block to preserve formatting in slack
  };
 
 / helper functions to correctly parse columns
