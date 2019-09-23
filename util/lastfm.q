@@ -34,12 +34,17 @@
   :first({[t;d;l]                                                                               / [table;params;limit]
     r:.lfm.req.r d;                                                                             / make request
     if[`error in key r;
-      .lg.e"Error making last.fm request";
-      :(();d;0);
+      .lg.e"Error making last.fm request, error code ",string r`error;
+      if[r[`error]in 8 29f;                                                                     / if backend fails (8) or rate limited exceeded (29) then sleep and retry
+        .lg.o"Sleeping for 60s before retrying";
+        system"sleep 60";
+        :(t;d;l);
+      ];
+      :(t;d;0);
     ];
     if[0=l&:"J"$first[value r][`$"@attr"]`total;                                                / update limit to ensure correct number of results are processed
       .lg.o"No results for user";
-      :(();d;0);
+      :(t;d;0);
     ];
     r@:first except[;`$"@attr"]key r@:first key r;                                              / extract relevant values
     r@:where not(`$"@attr")in/:key each r;                                                      / filter out now playing duplicates
