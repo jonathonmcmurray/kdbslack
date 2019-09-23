@@ -35,7 +35,7 @@
     r:.lfm.req.r d;                                                                             / make request
     if[`error in key r;
       .lg.e"Error making last.fm request, error code ",string r`error;
-      if[r[`error]in 8 29f;                                                                     / if backend fails (8) or rate limited exceeded (29) then sleep and retry
+      if[r[`error]in 8 29f;                                                                     / if backend fails (8) or rate limit exceeded (29) then sleep and retry
         .lg.o"Sleeping for 60s before retrying";
         system"sleep 60";
         :(t;d;l);
