@@ -7,7 +7,7 @@ postChart:{[s;e]                                                                
   if[0=count .lfm.o.charts;:.lg.w"No charts currently specified in .lfm.o.charts"];
   c:chart[s;e];                                                                                 / get charts
   .lg.o"Posting last.fm charts to slack as lastfmbot in ",.lfm.channel;
-  .slack.postase[c;.slack.chanlist .lfm.channel;"lastfmbot";":lastfm:"];                        / post charts as lastfmbot
+  .slack.postase[;.slack.chanlist .lfm.channel;"lastfmbot";":lastfm:"]each value c;             / post charts as lastfmbot
  };
 
 tm:{postChart .(.z.d-7 0)+10:00};                                                               / post chart for previous 7 days
