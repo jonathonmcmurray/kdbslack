@@ -3,7 +3,7 @@
 / config
 channel:"pub-quizzing"
 
-getQuiz:{
+tm:{
  / Getting json object of joe website links
   root:system "wget -q https://www.joe.co.uk/joe/the-joe-friday-pub-quiz -O -";
  / Identify latest friday quiz link
@@ -14,4 +14,4 @@ getQuiz:{
  .slack.postase[link;.slack.chanlist .qwz.channel;"pubQuizBot";":beers:"]
  };
 
-.timer.add[`.qwz.getQuiz;`;07D00:00;1b];
+.timer.adddaily[`.qwz.tm;`;14:00;6];
