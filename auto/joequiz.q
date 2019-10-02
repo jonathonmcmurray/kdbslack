@@ -4,8 +4,8 @@
 channel:"pub-quizzing"
 
 tm:{
- / Getting json object of joe website links
-  root:system "wget -q https://www.joe.co.uk/joe/the-joe-friday-pub-quiz -O -";
+ / Getting html object of joe website links
+  root:"\n" vs .req.g"https://www.joe.co.uk/joe/the-joe-friday-pub-quiz" ;
  / Identify latest friday quiz link
   suffix:-2_9_first root where root like "*the-joe-friday-pub-quiz-week*";
  / form link
