@@ -5,7 +5,7 @@ channel:"pub-quizzing"
 
 tm:{
  / Getting html object of joe website links
-  root:"\n" vs .req.g"https://www.joe.co.uk/joe/the-joe-friday-pub-quiz" ;
+  root:"\n" vs .req.g"https://www.joe.co.uk/entertainment/pub-quiz" ;
  / Identify latest friday quiz link
   suffix:-2_9_first root where root like "*the-joe-friday-pub-quiz-week*";
  / form link
