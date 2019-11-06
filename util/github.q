@@ -18,4 +18,8 @@ getmembers:{[o] / o: organization
 .gh.get:.req.get[;enlist[`Authorization]!enlist"token ",tk]                         //get for GH with token
 getraw:.req.send[`GET;;enlist[`Authorization]!enlist"token ",tk;();.req.VERBOSE]    //get for GH with token, keep headers
 
-members:getmembers["AquaQAnalytics"]`login                                          //get member list for AQ (used to filter chlg hub stuff)
+.gh.membertm:{
+  .lg.o"Refreshing github members list";
+  .gh.members:.gh.getmembers["AquaQAnalytics"]`login;                               //get member list for AQ (used to filter chlg hub stuff)
+ }
+.gh.membertm[];
