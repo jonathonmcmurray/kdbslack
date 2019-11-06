@@ -10,7 +10,7 @@ bs:getbdgs[]                                                                    
 
 bdgs:{
   a:.chlg.getbdgs[];                                                                //download badges
-  n:w,'d w:where 0<count each d:a except' bs;                                       //get new badges earnt
+  n:w,'d w:where 0<count each d:a except'key[a]#bs;                                 //get new badges earnt
   postbdg each n;                                                                   //post all the new badges
   bs::a;
  }
@@ -27,7 +27,7 @@ postbdg:{
 
 tm:{
   n:count each .j.k .Q.hg url;                                                      //download new board
-  n:(`$.gh.members)#n;                                                              //filter to only AQ people
+  n:(key[n]inter`$.gh.members)#n;                                                   //filter to only AQ people
   u:(where st<>n)#n-st;                                                             //get changes
   if[0<count u;                                                                     //if challenges completed, trigger message
      .slack.postasi[;.slack.chanlist"qquestions";"Challenge Bot";logo]              //send message with icon
