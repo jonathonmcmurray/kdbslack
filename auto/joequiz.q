@@ -14,4 +14,4 @@ tm:{
  .slack.postase[link;.slack.chanlist .qwz.channel;"pubQuizBot";":beers:"]
  };
 
-.timer.adddaily[`.qwz.tm;`;14:00;6];
+/.timer.adddaily[`.qwz.tm;`;14:00;6];
