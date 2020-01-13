@@ -11,7 +11,7 @@
 .lfm.o.charts:`tracks`artists`albums;                                                           / list of charts to return
 .lfm.o.cols:`users`usercount!01b;                                                               / optional columns to include in output
 .lfm.o.outputChart:1b;                                                                          / determine if chart output should be saved to disk
-.lfm.o.output:`:/tmp/lastfm;                                                                    / directory to save chart output
+.lfm.o.output:`:/home/shared/lastfm;                                                            / directory to save chart output
 
 / preamble
 .lfm.key:@[{first read0 x};.lfm.file.key;""];                                                   / get api key
