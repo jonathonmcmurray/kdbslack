@@ -10,6 +10,8 @@
 .lfm.o.custom:`tracks`artists`albums!20 20 10;                                                  / custom number of results to include for each chart type
 .lfm.o.charts:`tracks`artists`albums;                                                           / list of charts to return
 .lfm.o.cols:`users`usercount!01b;                                                               / optional columns to include in output
+.lfm.o.outputChart:1b;                                                                          / determine if chart output should be saved to disk
+.lfm.o.output:`:/home/shared/lastfm;                                                            / directory to save chart output
 
 / preamble
 .lfm.key:@[{first read0 x};.lfm.file.key;""];                                                   / get api key
@@ -60,9 +62,9 @@
  };
 
 .lfm.h.scrobbles:{[s;e;n;u]                                                                     / [start timestamp;end timestamp;name;username] get scrobbles for a single user
-  .lg.o"Requesting scrobbles for ",string[n]," between ",string[s]," and ",string e;
+  .lg.o"Requesting scrobbles for ",p:string[u]," between ",string[s]," and ",string e;
   res:update user:n from .lfm.user.recent[u;s;e];                                               / get scrobbles and add name to table
-  .lg.o"Returning scrobbles for ",string[n]," between ",string[s]," and ",string e;
+  .lg.o"Returning scrobbles for ",p;
   :res;                                                                                         / return scrobbles for a user
  };
 
@@ -78,12 +80,14 @@
 .lfm.c.albums:{[data]select scrobbles:count i,users:distinct user,usercount:count distinct user by artist,album from data}; / select data for albums chart
 .lfm.c.artists:{[data]select scrobbles:count i,users:distinct user,usercount:count distinct user by artist from data}; / select data for artists chart
 
-.lfm.c.wrapper:{[t;data]                                                                        / [type;data] wrapper for selecting chart data
+.lfm.c.wrapper:{[s;e;t;data]                                                                    / [start timestamp;end timestamp;type;data] wrapper for selecting chart data
   c:.lfm.o.default^.lfm.o.custom t;                                                             / find number of results to return
-  res:c sublist`scrobbles`usercount xdesc .lfm.c[t]data;                                        / sort by scrobbles and total listening users
+  res:`scrobbles`usercount xdesc .lfm.c[t]data;                                                 / sort by scrobbles and total listening users
   res:`n xcols 0!update n:fills?[differ scrobbles;1+i;0N]from res;                              / number track placement
   .lg.o"Returning ",string[t]," chart";
-  :where[not .lfm.o.cols]_res;                                                                  / return chart, applying optional column settings
+  cht:where[not .lfm.o.cols]_res;                                                               / apply optional column settings
+  .lfm.save[s;e;t;cht];                                                                         / save chart to disk (if enabled)
+  :c sublist cht;                                                                               / return chart
  };
 
 .lfm.c.format:{[t;data]t," Chart\n\n",.fmt.t .lfm.h.trim data};                                 / [type;data] format chart for slack
@@ -94,7 +98,7 @@
  };
 
 / output formatting functions
-.lfm.o.format:{[data;t].lfm.c.format[@[string t;0;upper]].lfm.c.wrapper[t]data};                / [data;type] wrapper for formatting charts
+.lfm.o.format:{[s;e;data;t].lfm.c.format[@[string t;0;upper]].lfm.c.wrapper[s;e;t]data};        / [start timestamp;end timestamp;data;type] wrapper for formatting charts
 
 .lfm.chart:{[s;e]                                                                               / [start timestamp;end timestamp]
   if[0=count .lfm.o.charts;                                                                     / check that there are charts to produce
@@ -103,13 +107,21 @@
   ];
   data:.lfm.scrobbles[s;e];                                                                     / get scrobbles for all users
   .lg.o"Producing charts for ",", "sv string .lfm.o.charts;
-  fm:.lfm.o.charts!.lfm.o.format[data]'[(),.lfm.o.charts];                                      / get top charts for passed params
+  fm:.lfm.o.charts!.lfm.o.format[s;e;data]'[(),.lfm.o.charts];                                  / get top charts for passed params
   uc:"\n\nUser count: ",string count .lfm.users;                                                / get user stats
   us:"\nUnique scrobblers: ",string exec count distinct user from data;                         / get number of users to scrobble over charting period
   sc:"\nScrobble count: ",string count data;                                                    / get total scrobbles
   fm[`stats]:uc,us,sc;                                                                          / add stats to dictionary
   .lg.o"Returning formatted charts and stats";
   :{"```",x,"```"}each fm;                                                                      / wrap in code block to preserve formatting in slack
+ };
+
+.lfm.save:{[s;e;t;c]                                                                            / [start timestamp;end timestamp;chart type;chart] save chart to disk
+  if[not .lfm.o.outputChart;.lg.o"Saving to disk is disabled";:()];                             / exit early if saving not enabled
+  .lg.o"Saving ",string[t]," chart to disk";
+  fn:`$("_"sv enlist[string t],@'[;8;:;"_"](16 sublist/:string(s;e))except\:".:"),".csv";       / create filename for current chart
+  (fp:` sv .lfm.o.output,fn)0:","0: c;                                                          / save chart to disk
+  .lg.o"Finished saving ",string[t]," chart to ",1_string fp;
  };
 
 / helper functions to correctly parse columns
