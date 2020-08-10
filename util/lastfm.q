@@ -120,7 +120,7 @@
   if[not .lfm.o.outputChart;.lg.o"Saving to disk is disabled";:()];                             / exit early if saving not enabled
   .lg.o"Saving ",string[t]," chart to disk";
   fn:`$("_"sv enlist[string t],@'[;8;:;"_"](16 sublist/:string(s;e))except\:".:"),".csv";       / create filename for current chart
-  (fp:` sv .lfm.o.output,fn)0:","0: c;                                                          / save chart to disk
+  (fp:` sv .lfm.o.output,fn)0:","0:@[c;exec c from meta[c]where t="s";string];                  / save chart to disk, converting symbols to string to preserve commas
   .lg.o"Finished saving ",string[t]," chart to ",1_string fp;
  };
 
