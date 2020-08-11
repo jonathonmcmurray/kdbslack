@@ -70,7 +70,8 @@
 
 .lfm.scrobbles:{[s;e]                                                                           / [start timestamp;end timestamp] get scrobbles for all users
   .lg.o"Requesting scrobbles for each user between ",string[s]," and ",string e;
-  res:raze .lfm.h.scrobbles[s;e]./:exec(name,'username)from .lfm.users;                         / get top chart for passed param for each user
+  u:`$exec id from .slack.userlist;                                                             / get list of user ids from slack
+  res:raze .lfm.h.scrobbles[s;e]./:exec(name,'username)from .lfm.users where uid in u;          / get top chart for passed param for each valid user
   .lg.o"Returning top scrobbles for each user between ",string[s]," and ",string e;
   :res;                                                                                         / return raw data
  };
@@ -137,17 +138,17 @@
  };
 
 .lfm.u.add:{[id;n;u]                                                                            / [id;name;username] add user to cache
-  .lg.o"Updating username for ",n;
+  .lg.o"Updating last.fm username for ",n;
   if[(`$u)in exec username from .lfm.users;                                                     / check for username duplication
     .lg.w"User ",n," is attempting to add username ",u," that is already in use";
     :(0b;"username already in use");                                                            / return failed status
   ];
   if[`error in key v:.lfm.req.s`method`user!("user.getinfo";u);                                 / verify that valid last.fm username has been passed
-    .lg.e"Failed to get user info for ",u," with error: ",v`message;
+    .lg.e"Failed to get last.fm user info for ",u," with error: ",v`message;
     :(0b;"username is invalid");                                                                / return failed status
   ];
   `.lfm.users upsert`$(id;n;u);                                                                 / add/update record in cache
-  :(1b;"successfully added username ",u);                                                       / return passed status
+  :(1b;"successfully added last.fm username ",u);                                               / return passed status
  };
 
 .lfm.u.rm:{[id;n;u]                                                                             / [id;name;username] remove user from cache
