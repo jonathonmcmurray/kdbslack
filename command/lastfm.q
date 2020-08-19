@@ -6,7 +6,7 @@ adduser:{[x]
     :.slack.ret"functionality not enabled";                                                     / return status message privately
   ];
   r:exec from .slack.userlist where id like x`user_id;                                          / get details for current user
-  .lg.o"Updating last.fm username for ",r[`real_name]," (",r[`name],")";
+  .lg.o"Updating last.fm username for ",string[r`real_name]," (",string[r`name],")";
   st:.lfm.u.handler[x`user_id;r`real_name;trim x`text];                                         / update last.fm username for user
   :.slack.ret st 1;                                                                             / return status message privately
  };
