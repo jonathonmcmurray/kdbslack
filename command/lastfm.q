@@ -1,7 +1,7 @@
 \d .lfm
 
 adduser:{[x]
-  if[not .lfm.valid[];                                                                          / check if funtionality is enabled
+  if[not .lfm.valid[];                                                                          / check if functionality is enabled
     .lg.w"last.fm not enabled, user request cannot be made";
     :.slack.ret"functionality not enabled";                                                     / return status message privately
   ];
