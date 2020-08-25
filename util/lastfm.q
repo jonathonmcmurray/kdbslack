@@ -11,7 +11,7 @@
 .lfm.o.charts:`tracks`artists`albums;                                                           / list of charts to return
 .lfm.o.cols:`users`usercount!01b;                                                               / optional columns to include in output
 .lfm.o.outputChart:1b;                                                                          / determine if chart output should be saved to disk
-.lfm.o.output:`:/home/shared/lastfm;                                                            / directory to save chart output
+.lfm.o.output:hsym@[get;`.lfm.o.output;`:/home/shared/lastfm];                                  / directory to save chart output
 
 / preamble
 .lfm.key:@[{first read0 x};.lfm.file.key;""];                                                   / get api key
@@ -109,7 +109,8 @@
   data:.lfm.scrobbles[s;e];                                                                     / get scrobbles for all users
   .lg.o"Producing charts for ",", "sv string .lfm.o.charts;
   fm:.lfm.o.charts!.lfm.o.format[s;e;data]'[(),.lfm.o.charts];                                  / get top charts for passed params
-  uc:"\n\nUser count: ",string count .lfm.users;                                                / get user stats
+  u:`$exec id from .slack.userlist;                                                             / get list of user ids from slack
+  uc:"\n\nUser count: ",string count select from .lfm.users where uid in u;                     / get user stats
   us:"\nUnique scrobblers: ",string exec count distinct user from data;                         / get number of users to scrobble over charting period
   sc:"\nScrobble count: ",string count data;                                                    / get total scrobbles
   fm[`stats]:uc,us,sc;                                                                          / add stats to dictionary
