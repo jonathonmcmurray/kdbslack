@@ -1,1 +1,1 @@
-unicount:{"J"$first system"util/unicount \"",x,"\""}
+.utf.unicount:{"J"$first system"util/unicount \"",x,"\""}
