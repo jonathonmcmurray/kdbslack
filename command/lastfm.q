@@ -1,12 +1,13 @@
 \d .lfm
 
-adduser:{
-  if[not .lfm.valid[];                                                                          / check if cuntionality is enabled
+adduser:{[x]
+  if[not .lfm.valid[];                                                                          / check if functionality is enabled
     .lg.w"last.fm not enabled, user request cannot be made";
-    :.slack.ret"functionality not enabled";                                                      / return status message privately
+    :.slack.ret"functionality not enabled";                                                     / return status message privately
   ];
-  p:.j.k[.slack.users.info x`user_id][`user;`profile];                                          / get user profile
-  st:.lfm.u.handler[x`user_id;p`real_name;trim x`text];                                         / update last.fm username for user
+  r:exec from .slack.userlist where id like x`user_id;                                          / get details for current user
+  .lg.o"Updating last.fm username for ",string[r`real_name]," (",string[r`name],")";
+  st:.lfm.u.handler[x`user_id;r`real_name;trim x`text];                                         / update last.fm username for user
   :.slack.ret st 1;                                                                             / return status message privately
  };
 
