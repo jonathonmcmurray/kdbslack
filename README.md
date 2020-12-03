@@ -57,7 +57,7 @@ When starting kdbslack, include `command` in the load directories to load these 
 
 Event plugins respond to [events](#https://api.slack.com/events-api) from Slack e.g. a new team member joining Slack.
 
-Currently the only example implemented of this is for a team member joining, the `team_join` event. This example is currently located in `util/slack.q` although in future this will be moved to it's own directory similar to auto & command.
+Currently there are two examples of this is; first is for a team member joining, the `team_join` event. This example is currently located in `events/team_join.q`. Second is for a `user_change` event, which is currently located in `events/user_change.q`.
 
 An event handler function should accept a dictionary, similar to a command handler. In order to register a handler function, it should be placed in the `.slack.events` dictionary, for example:
 
