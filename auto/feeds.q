@@ -16,8 +16,7 @@ fmt0:{[c;t;m;n]                                                                 
   u:user[t]m;                                                                       //extract username using type-specific user func
   l:$[c;link.col;::]link[t]m`link;                                                  //extract link using type-specific link func, optionally colour
   t:$[c;title.col;::]title[t]m`title;                                               //extract title using type-specific title func, optionally colour
-  /g:"\nAnswerers: <@",("> & <@" sv ans curgroup),">";                               //call out the group responsible for answering this question
-  g:"";
+  g:"\nAnswerers: <@",("> & <@" sv ans curgroup),">";                               //call out the group responsible for answering this question
   .feeds.curgroup:mod[curgroup+1;count ans];                                        //increment group counter
   u," asked a question on ",n," titled: ",t,"\nLink: ",l,g                          //put together string for message, include feed name n
  }

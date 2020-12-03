@@ -8,7 +8,7 @@ linkparse:{(!/)flip({`$-1_5_x};except[;"<>"])@'/:reverse each trim ";"vs'","vs x
 getmembers:{[o] / o: organization
   rw:getraw url,"orgs/",o,"/members";                                               //get first page of members
   r:.j.k rw 1;h:rw 0;                                                               //parse body, extract header
-  while[`next in key l:linkparse h`Link;                                            //iterate through all pages
+  while[`next in key l:linkparse h`link;                                            //iterate through all pages
    rw:getraw l`next;                                                                //get next page
    r,:.j.k rw 1;h:rw 0;                                                             //parse & join body, extract header
   ];

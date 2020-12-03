@@ -1,14 +1,14 @@
 \d .aoc
 
-.req.addcookie["adventofcode.com";"session=",first read0`:config/aoc_cookie];                                   //load & add AoC session cookie
+.cookie.addcookie["adventofcode.com";"session=",first read0`:config/aoc_cookie];                                //load & add AoC session cookie
 .req.def["User-Agent"],:";contact=jonathon.mcmurray@aquaq.co.uk";                                               //add contact info to UA in case of issues
 st:enlist[0N 0N]!enlist[flip `name`local_score`stars`global_score`id`last_star_ts`completion_day_level!()];     //state dict for states of each lb & year combo
-yrlst:2015 2016 2017 2018;                                                                                           //list of years that can be queried
+yrlst:2015 2016 2017 2018 2019 2020;                                                                            //list of years that can be queried
 prstrs:enlist[0N]!enlist ([id:()] stars:());                                                                    //dict to mantain prev star totals
 lb:113948                                                                                                       //AquaQ leaderboard
 
 getlb:{[x;y] /x:leaderboard id,y:year
-  j:.req.g"http://adventofcode.com/",string[y],"/leaderboard/private/view/",string[x],".json";                  // web request for lb JSON
+  j:.req.g"https://adventofcode.com/",string[y],"/leaderboard/private/view/",string[x],".json";                 // web request for lb JSON
   t:`name`local_score`stars`global_score`id`last_star_ts`completion_day_level#/:value j`members;                
   :update name:("anon",/:id) from t where 10h<>type each name;
  };

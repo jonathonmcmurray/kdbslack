@@ -1,6 +1,7 @@
 /post.q - utility functions for accepting POST requests of different types
 \d .post
 
+.bot.req:()
 form:{
   r:(!/)"S=&"0:.h.uh ssr[x;"+";" "];                                                //parse incoming request into dict, replace escaped chars
   .lg.i "received request for ",r[`command]," from ",r[`user_name];                 //log recieved request
