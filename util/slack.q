@@ -50,7 +50,7 @@ getusers:{
   :"*SS"$/:k#select from r where not deleted;                                       //remove users that have been deleted
  }
 
-postas0:{[m;c;u;i;e] /m-message,c-channel ID,u-user,i-icon,e-emoji
+postas0:{[m;c;u;i;e;img] /m-message,c-channel ID,u-user,i-icon,e-emoji,img-image
   d:()!();                                                                          //create dictionary to build up API request
   d[`token]:token;
   d[`channel]:c;
@@ -59,12 +59,16 @@ postas0:{[m;c;u;i;e] /m-message,c-channel ID,u-user,i-icon,e-emoji
   d[`username]:u;
   if[count i;d[`icon_url]:i];                                                       //if icon url is passed in, use it
   if[count e;d[`icon_emoji]:e];                                                     //if icon emoji is passed in, use it
+  if[count img;d[`image_url]:img];                                                  //if image url is passed in, use it
   .Q.hp[.slack.url`chat.postMessage;.post.ty`form;.post.urlencode d];               //send POST request to API URL
  }
 
-postas:postas0[;;;"";""]                                                            //projection to post as a username with default icon
-postasi:postas0[;;;;""]                                                             //projection to post as username with icon URL
-postase:postas0[;;;"";]                                                             //projection to post as username with emoji icon
+postas:postas0[;;;"";"";""]                                                         //projection to post as a username with default icon
+postasi:postas0[;;;;"";""]                                                          //projection to post as username with icon URL
+postase:postas0[;;;"";;""]                                                          //projection to post as username with emoji icon
+postasimg:postas0[;;;"";"";]                                                        //projection to post as a username with default icon with image attached
+postasimgi:postas0[;;;;"";]                                                         //projection to post as a username with icon URL and image attached
+postasimge:postas0[;;;"";;]                                                         //projection to post as a username with emoji icon and image attached
 
 userlist:getusers[];                                                                //get list of all valid users
 chanlist:{c:.j.k[channels.list[]]`channels;g:.j.k[groups.list[]]`groups;exec name!id from raze `name`id#/:(c;g)}[]
