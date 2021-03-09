@@ -62,8 +62,8 @@ postas0:{[m;c;u;i;e;img] /m-message,c-channel ID,u-user,i-icon,e-emoji,img-image
   d[`username]:u;
   if[count i;d[`icon_url]:i];                                                       //if icon url is passed in, use it
   if[count e;d[`icon_emoji]:e];                                                     //if icon emoji is passed in, use it
-  if[count img;a[`title]:"";a[`image_url]:img];                                                   //if image url is passed in, use it
-  if[count a;d[`attachments]:"[",(.j.j a),"]"];                                               //if attachments present add a block for them
+  if[count img;a[`title]:"";a[`image_url]:img];                                     //if image url is passed in, use it
+  if[count a;d[`attachments]:"[",(.j.j a),"]"];                                     //if attachments present add a block for them
   .Q.hp[.slack.url`chat.postMessage;.post.ty`form;.post.urlencode d];               //send POST request to API URL
  }
 
