@@ -23,10 +23,10 @@ taguser:{[uid] "<@",uid,">"}
 /for more advanced usage of these API calls, more sophisticated code will be necessary
 conversations.list:{.Q.hp[url`conversations.list;.post.ty`form;.post.urlencode (`token`limit`exclude_archived)!(token;500;"true")]}
 conversations.info:{[chid].Q.hp[url`conversations.info;.post.ty`form;.post.urlencode `token`channel!(token;chid)]}
-channels.list:conversations.list
-channels.info:conversations.info
+channels.list:{.Q.hp[url`conversations.list;.post.ty`form;.post.urlencode (`token`limit`exclude_archived`types)!(token;500;"true";"public_channel"))}
+channels.info:conversations.info[chid]
 chat.postMessage:{[chid;msg].Q.hp[url`chat.postMessage;.post.ty`form;.post.urlencode `token`channel`text!(token;chid;msg)]}
-groups.list:conversations.list
+groups.list:{.Q.hp[url`conversations.list;.post.ty`form;.post.urlencode (`token`limit`exclude_archived`types)!(token;500;"true";"private_channel"))}
 groups.info:conversations.info
 im.list:{.Q.hp[url`im.list;.post.ty`form;.post.urlencode (1#`token)!enlist token]}
 im.info:{[chid].Q.hp[url`im.info;.post.ty`form;.post.urlencode `token`channel!(token;chid)]}
