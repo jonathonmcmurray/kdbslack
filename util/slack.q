@@ -21,15 +21,15 @@ taguser:{[uid] "<@",uid,">"}
 /-- api calls --
 /the following are wrappers around slack API calls (of the same name) exposing very basic functionality
 /for more advanced usage of these API calls, more sophisticated code will be necessary
-conversations.list:{.Q.hp[url`conversations.list;.post.ty`form;.post.urlencode (`token`limit`exclude_archived)!(token;500;"true")]}
+conversations.list:{[types].Q.hp[url`conversations.list;.post.ty`form;.post.urlencode (`token`limit`exclude_archived`type)!(token;500;"true";types)]}
 conversations.info:{[chid].Q.hp[url`conversations.info;.post.ty`form;.post.urlencode `token`channel!(token;chid)]}
-channels.list:{.Q.hp[url`conversations.list;.post.ty`form;.post.urlencode (`token`limit`exclude_archived`types)!(token;500;"true";"public_channel")]}
+channels.list:conversations.list["public_channel"]
 channels.info:conversations.info
 chat.postMessage:{[chid;msg].Q.hp[url`chat.postMessage;.post.ty`form;.post.urlencode `token`channel`text!(token;chid;msg)]}
-groups.list:{.Q.hp[url`conversations.list;.post.ty`form;.post.urlencode (`token`limit`exclude_archived`types)!(token;500;"true";"private_channel")]}
+groups.list:conversations.list["private_channel"]
 groups.info:conversations.info
-im.list:{.Q.hp[url`im.list;.post.ty`form;.post.urlencode (1#`token)!enlist token]}
-im.info:{[chid].Q.hp[url`im.info;.post.ty`form;.post.urlencode `token`channel!(token;chid)]}
+im.list:conversations.list["im,mpim"]
+im.info:conversations.info
 users.list:{.Q.hp[url`users.list;.post.ty`form;.post.urlencode (1#`token)!enlist token]}
 users.info:{[uid].Q.hp[url`users.info;.post.ty`form;.post.urlencode `token`user!(token;uid)]}
 files.upload:{.req.postmulti[url`files.upload;@[x;`token;:;token]]}
@@ -75,5 +75,5 @@ postasimgi:postas0[;;;;"";]                                                     
 postasimge:postas0[;;;"";;]                                                         //projection to post as a username with emoji icon and image attached
 
 userlist:getusers[];                                                                //get list of all valid users
-chanlist:{c:.j.k[conversations.list[]]`channels;exec name!id from c}[]
+chanlist:{c:.j.k[conversations.list["public_channel,private_channel"]]`channels;exec name!id from c}[]
 \d .
