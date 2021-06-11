@@ -21,13 +21,15 @@ taguser:{[uid] "<@",uid,">"}
 /-- api calls --
 /the following are wrappers around slack API calls (of the same name) exposing very basic functionality
 /for more advanced usage of these API calls, more sophisticated code will be necessary
-channels.list:{.Q.hp[url`channels.list;.post.ty`form;.post.urlencode (1#`token)!enlist token]}
-channels.info:{[chid].Q.hp[url`channels.info;.post.ty`form;.post.urlencode `token`channel!(token;chid)]}
+conversations.list:{[types].Q.hp[url`conversations.list;.post.ty`form;.post.urlencode (`token`limit`exclude_archived`type)!(token;500;"true";types)]}
+conversations.info:{[chid].Q.hp[url`conversations.info;.post.ty`form;.post.urlencode `token`channel!(token;chid)]}
+channels.list:{conversations.list["public_channel"]}
+channels.info:conversations.info
 chat.postMessage:{[chid;msg].Q.hp[url`chat.postMessage;.post.ty`form;.post.urlencode `token`channel`text!(token;chid;msg)]}
-groups.list:{.Q.hp[url`groups.list;.post.ty`form;.post.urlencode (1#`token)!enlist token]}
-groups.info:{[chid].Q.hp[url`groups.info;.post.ty`form;.post.urlencode `token`channel!(token;chid)]}
-im.list:{.Q.hp[url`im.list;.post.ty`form;.post.urlencode (1#`token)!enlist token]}
-im.info:{[chid].Q.hp[url`im.info;.post.ty`form;.post.urlencode `token`channel!(token;chid)]}
+groups.list:{conversations.list["private_channel"]}
+groups.info:conversations.info
+im.list:{conversations.list["im,mpim"]}
+im.info:conversations.info
 users.list:{.Q.hp[url`users.list;.post.ty`form;.post.urlencode (1#`token)!enlist token]}
 users.info:{[uid].Q.hp[url`users.info;.post.ty`form;.post.urlencode `token`user!(token;uid)]}
 files.upload:{.req.postmulti[url`files.upload;@[x;`token;:;token]]}
@@ -50,8 +52,9 @@ getusers:{
   :"*SS"$/:k#select from r where not deleted;                                       //remove users that have been deleted
  }
 
-postas0:{[m;c;u;i;e] /m-message,c-channel ID,u-user,i-icon,e-emoji
+postas0:{[m;c;u;i;e;img] /m-message,c-channel ID,u-user,i-icon,e-emoji,img-image
   d:()!();                                                                          //create dictionary to build up API request
+  a:()!();
   d[`token]:token;
   d[`channel]:c;
   d[`text]:m;
@@ -59,13 +62,18 @@ postas0:{[m;c;u;i;e] /m-message,c-channel ID,u-user,i-icon,e-emoji
   d[`username]:u;
   if[count i;d[`icon_url]:i];                                                       //if icon url is passed in, use it
   if[count e;d[`icon_emoji]:e];                                                     //if icon emoji is passed in, use it
+  if[count img;a[`title]:"";a[`image_url]:img];                                     //if image url is passed in, use it
+  if[count a;d[`attachments]:"[",(.j.j a),"]"];                                     //if attachments present add a block for them
   .Q.hp[.slack.url`chat.postMessage;.post.ty`form;.post.urlencode d];               //send POST request to API URL
  }
 
-postas:postas0[;;;"";""]                                                            //projection to post as a username with default icon
-postasi:postas0[;;;;""]                                                             //projection to post as username with icon URL
-postase:postas0[;;;"";]                                                             //projection to post as username with emoji icon
+postas:postas0[;;;"";"";""]                                                         //projection to post as a username with default icon
+postasi:postas0[;;;;"";""]                                                          //projection to post as username with icon URL
+postase:postas0[;;;"";;""]                                                          //projection to post as username with emoji icon
+postasimg:postas0[;;;"";"";]                                                        //projection to post as a username with default icon with image attached
+postasimgi:postas0[;;;;"";]                                                         //projection to post as a username with icon URL and image attached
+postasimge:postas0[;;;"";;]                                                         //projection to post as a username with emoji icon and image attached
 
 userlist:getusers[];                                                                //get list of all valid users
-chanlist:{c:.j.k[channels.list[]]`channels;g:.j.k[groups.list[]]`groups;exec name!id from raze `name`id#/:(c;g)}[]
+chanlist:{c:.j.k[conversations.list["public_channel,private_channel"]]`channels;exec name!id from c}[]
 \d .
