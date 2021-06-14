@@ -24,7 +24,7 @@
 
 / http requests
 .lfm.req.r:{[d]                                                                                 / [params] make a request to last.fm
-  url:.lfm.url,.req.urlencode d;                                                                / encode passed params
+  url:.lfm.url,.url.enc d;                                                                			/ encode passed params
   :.j.k raze system"curl -s '",url,"'";                                                         / make curl request to last.fm servers
  };
 
