@@ -1,10 +1,12 @@
 /kx.q
 
 dl.kx:{[url]
-  :.Q.id .rss.get[url][`rss][`channel][`item];                                    //download & parse RSS XML
+  kx:.rss.get[url][`rss][`channel];                                                 //download & parse RSS XML
+  :$[`item in key kx;.Q.id kx[`item];()];
  }
 
 chk.kx:{[id;kx]
+  if[kx~();:()];
   nq:select from kx where ("z"$"P"$dcdate)>.feeds.ldt[id];                           //select items that are new
   .feeds.ldt[id]:exec max "z"$"P"$dcdate from kx;                                    //update latest datetime
   nq:$[count nq;
