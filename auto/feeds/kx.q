@@ -2,7 +2,7 @@
 
 dl.kx:{[url]
   kx:.rss.get[url][`rss][`channel];                                                 //download & parse RSS XML
-  :$[`item in key kx;.Q.id $[1=count kx`item;enlist;]kx[`item];()];
+  :$[`item in key kx;.Q.id $[99h=type kx`item;enlist;]kx[`item];()];
  }
 
 chk.kx:{[id;kx]
