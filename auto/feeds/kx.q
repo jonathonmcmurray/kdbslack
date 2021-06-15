@@ -13,6 +13,6 @@ chk.kx:{[id;kx]
   :nq;
  }
 
-link.k4:{x}
-title.k4:{x}
-user.k4:{x`dccreator}
+link.kx:{x}
+title.kx:{x}
+user.kx:{x`dccreator}
