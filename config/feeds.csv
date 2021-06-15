@@ -2,3 +2,7 @@ type,url,name
 ggrp,https://groups.google.com/forum/feed/personal-kdbplus/topics/rss.xml?num=15,Google Groups (personal kdb)
 ggrp,https://groups.google.com/forum/feed/kdbtorq/topics/rss.xml?num=15,Google Groups (kdbtorq)
 stack,https://api.stackexchange.com/2.2/questions?order=desc&sort=creation&tagged=kdb&site=stackoverflow,StackOverflow
+kx,https://community.kx.com/btwke96422/rss/board?board.id=kdb-q-questions,KX Community (KX Tech)
+kx,https://community.kx.com/btwke96422/rss/board?board.id=q-bies,KX Community (Q-bies)
+kx,https://community.kx.com/btwke96422/rss/board?board.id=kx-products-other,KX Community (KX Products)
+kx,https://community.kx.com/btwke96422/rss/board?board.id=KXAcademy,KX Community (KX Introductory Workshop)

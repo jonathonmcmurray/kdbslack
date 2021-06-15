@@ -8,21 +8,15 @@
 ans:(exec name!id from .slack.userlist)`$"," vs' read0`:config/ansgroups.txt        //get list of answer groups
 curgroup:0                                                                          //set the next group to get a notification to the first one
 
-col:{[x;y] "\033[",string[x],"m",y,"\033[0m"}                                       //generic colouring function
-link.col:col[35]                                                                    //colour links (purple)
-title.col:col[33]                                                                   //colour titles (yellow)
-
-fmt0:{[c;t;m;n]                                                                     //format a single message; c-colour flag,t-feed type,m-message,n-feed name
+fmt0:{[t;m;n]                                                                       //format a single message; t-feed type,m-message,n-feed name
   u:user[t]m;                                                                       //extract username using type-specific user func
-  l:$[c;link.col;::]link[t]m`link;                                                  //extract link using type-specific link func, optionally colour
-  t:$[c;title.col;::]title[t]m`title;                                               //extract title using type-specific title func, optionally colour
+  l:link[t]m`link;                                                                  //extract link using type-specific link func, optionally colour
+  t:title[t]m`title;                                                                //extract title using type-specific title func, optionally colour
   g:"\nAnswerers: <@",("> & <@" sv ans curgroup),">";                               //call out the group responsible for answering this question
   .feeds.curgroup:mod[curgroup+1;count ans];                                        //increment group counter
   u," asked a question on ",n," titled: ",t,"\nLink: ",l,g                          //put together string for message, include feed name n
  }
-
-fmt:{fmt0[0b;x;;z] each y}                                                          //projection to format a list of messages, no colour
-fmtc:{fmt0[1b;x;;z] each y}                                                         //projection to format a list of messages, with colour
+fmt:{fmt0[x;;z] each y}                                                             //projection to format a list of messages
 
 .feeds.tm:{[cfg]                                                                    //timer function for feeds checking
   nq:chk'[cfg`type;cfg`id;] dl'[cfg`type;cfg`url];                                  //download & check each feed in cfg
