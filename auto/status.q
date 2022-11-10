@@ -7,7 +7,8 @@ tm:{
 
 cb:{[m]
   .lg.i "Daily status report complete, sending";                                    //alert report has been received to callback
-  .slack.msg[.slack.hooks`homerstatus] "\n" sv m;                                   //send report to slack
+  .slack.msg[.slack.hooks`homerstatus] m:"\n" sv m;                                 //send report to slack
+  .teams.msg[.teams.hooks`kdbgeneral;"Homer Status - ",string .z.d;m];              //send report to Teams
  }
 
 \d .
